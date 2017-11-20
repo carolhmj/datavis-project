@@ -2,7 +2,12 @@
 var chart = dc.barChart("#happinessFactors");
 
 var explLogGDP = "Explained by: Log GDP per capita";
+var explSocialSupport = "Explained by: Social support";
 var explHealthyLife = "Explained by: Healthy life expectancy";
+var explLifeChoices = "Explained by: Freedom to make life choices";
+var explGenerosity = "Explained by: Generosity";
+var explCorruption = "Explained by: Perceptions of corruption";
+var residualPlusDystopia = "Dystopia + residual";
 var ladderScore = "Ladder score";
 
 d3.csv("data/HappinessReport/whr2015.csv", function(data) {
@@ -11,6 +16,11 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 		d.show = false;
 		d[explLogGDP] = +d[explLogGDP];
 		d[explHealthyLife] = +d[explHealthyLife];
+		d[explSocialSupport] = +d[explSocialSupport];
+		d[explLifeChoices] = +d[explLifeChoices];
+		d[explGenerosity] = +d[explGenerosity];
+		d[explCorruption] = +d[explCorruption];
+		d[residualPlusDystopia] = +d[residualPlusDystopia];
 		d[ladderScore] = +d[ladderScore];
 	});
 
@@ -21,9 +31,9 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 	for (var i = data.length - 1; i >= data.length - 5; i--) {
 		data[i].show = true;
 	}
-	for (var i = 0; i < 5; i++) {
-		data[i].show = true;
-	}
+	// for (var i = 0; i < 5; i++) {
+	// 	data[i].show = true;
+	// }
 	
 	var facts = crossfilter(data);
 	var countryDimension = facts.dimension(function(d) {
@@ -32,11 +42,21 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 	var factorsGroup = countryDimension.group().reduce(function (p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) + v[explLogGDP];
 		p[explHealthyLife] = (p[explHealthyLife] | 0) + v[explHealthyLife];
+		p[explSocialSupport] = (p[explSocialSupport] | 0) + v[explSocialSupport];
+		p[explGenerosity] = (p[explGenerosity] | 0) + v[explGenerosity];
+		p[explCorruption] = (p[explCorruption] | 0) + v[explCorruption];
+		p[explLifeChoices] = (p[explLifeChoices] | 0) + v[explLifeChoices];
+		p[residualPlusDystopia] = (p[residualPlusDystopia] | 0) + v[residualPlusDystopia];
 		p[ladderScore] = (p[ladderScore] | 0) + v[ladderScore];
 		return p;
 	}, function(p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) - v[explLogGDP];
 		p[explHealthyLife] = (p[explHealthyLife] | 0) - v[explHealthyLife];
+		p[explSocialSupport] = (p[explSocialSupport] | 0) - v[explSocialSupport];
+		p[explGenerosity] = (p[explGenerosity] | 0) - v[explGenerosity];
+		p[explCorruption] = (p[explCorruption] | 0) - v[explCorruption];
+		p[explLifeChoices] = (p[explLifeChoices] | 0) - v[explLifeChoices];
+		p[residualPlusDystopia] = (p[residualPlusDystopia] | 0) - v[residualPlusDystopia];
 		p[ladderScore] = (p[ladderScore] | 0) - v[ladderScore];
 		return p;
 	}, function(p, v) {
@@ -70,8 +90,9 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 
 	console.log(filteredGroup.all().sort(function(x,y) {return y.value[ladderScore]-x.value[ladderScore];}).map(function (d) {return d.key[0]; /*d.country*/}));
 
-	chart.width(1000)
-		 .height(600)
+	chart.width(600)
+		 .height(1000)
+		 .gap(20)
 		 .x(d3.scale.ordinal().domain(filteredGroup.all().sort(function(x,y) {return y.value[ladderScore]-x.value[ladderScore];}).map(function (d) {return d.key[0]; /*d.country*/})))
 		 .xUnits(dc.units.ordinal)
 		 .margins({left: 20, top: 20, right: 20, bottom: 20})
@@ -79,10 +100,15 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 		 .elasticY(true)
 		 .dimension(countryDimension)
 		 // .group(filteredGroup)
-		 .group(filteredGroup, explHealthyLife, sel_stack(explHealthyLife))
+		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia))
 		 .keyAccessor(function(d) {return d.key[0];});	 
 
-	chart.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));	 
+	chart.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
+	chart.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
+	chart.stack(filteredGroup, explHealthyLife, sel_stack(explHealthyLife));
+	chart.stack(filteredGroup, explSocialSupport, sel_stack(explSocialSupport));
+	chart.stack(filteredGroup, explCorruption, sel_stack(explCorruption));
+	chart.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
 	chart.render();	 
 
 });
