@@ -1,3 +1,5 @@
+/* JS file for the visualization scripts */
+
 //Charts definition
 var chart = dc.barChart("#happinessFactors");
 

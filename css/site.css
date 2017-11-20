@@ -1,3 +1,5 @@
+/* CSS file for styling the main website */
+
 @font-face {
     font-family: avenirNext;
     src: url(avenir-next-regular.woff);
@@ -16,6 +18,27 @@ html, body {
     position:relative;
 }
 
+#main {
+    min-height:100%;
+    margin: 0 auto;
+    padding: 35px 15vw 150px;
+    text-align:left;
+    transition: ease 1s;
+}
+
+.section {
+    margin-bottom:50px;
+}
+
+h1 {
+    text-align:center;
+    transition: ease 1s;
+}
+
+a {
+    transition: ease .5s;
+}
+
 #menu {
     width:100%;
     height:35px;
@@ -31,12 +54,14 @@ html, body {
     transition: ease 1s;
 }
 
-#main {
-    min-height:100%;
-    margin: 0 auto;
-    padding: 35px 15vw 120px;
-    text-align:left;
-    transition: ease 1s;
+#menu a {
+    color: white;
+    margin-right:20px;
+    text-decoration: none;
+}
+
+#menu a:hover {
+    color: lightgray;
 }
 
 #footer {
@@ -49,28 +74,9 @@ html, body {
     z-index:1;
     text-align: left;
     background-color: #fafafa;
-    border-top: 1px #f5f5f5 solid;
+    border-top: 1px #f1f1f1 solid;
     transition: ease 1s;
     color: rgb(145, 145, 145);
-}
-
-h1 {
-    text-align:center;
-    transition: ease 1s;
-}
-
-a {
-    transition: ease .5s;
-}
-
-#menu a {
-    color: white;
-    margin-right:20px;
-    text-decoration: none;
-}
-
-#menu a:hover {
-    color: lightgray;
 }
 
 #footer h4 {
@@ -86,11 +92,11 @@ a {
 #footer p {
     margin: 6px 0px;
     font-size:14px;
-    color: rgb(185, 185, 185);
 }
 
 #footer a {
-    color: rgb(185, 185, 185);
+    color: rgb(145, 145, 145);
+    text-decoration: none;
 }
 
 #footer a:hover {
@@ -101,4 +107,5 @@ div#happinessFactors {
     -ms-transform: rotate(-270deg); /* IE 9 */
     -webkit-transform: rotate(-270deg); /* Chrome, Safari, Opera */
     transform: rotate(-270deg);
+    text-decoration: underline;
 }
