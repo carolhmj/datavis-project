@@ -14,17 +14,15 @@
     <script src="js/crossfilter.js" charset="utf-8"></script>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="js/dc.js" charset="utf-8"></script>
-    <!--<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
-    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>-->
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+
+    <link rel="stylesheet" href="css/map.css">
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
 
     <link rel="stylesheet" href="css/style.css">
-
-    <style>
-
-    #mapid { height: 180px; }
-
-    </style>
-
+    <script src="js/script.js" charset="utf-8"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -37,7 +35,8 @@
                 <h1>Uma exploração da felicidade</h1>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
             </section>
-            <div id="mapid"></div>
+            <div id="worldmap"></div>
+            <div class="country-name"></div>
             <section id="1">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
                 <div id="happinessFactors"></div>
@@ -54,6 +53,112 @@
             <p><strong>Autores:</strong> <a href="#" target="_blank">Carol Herbster</a>, <a href="https://erickkelvin.github.io" target="_blank">Erick Santos</a> e <a href="#" target="_blank">Mariana Fontenele</a></p>
         </div>
     </div>
-    <script src="js/script.js" charset="utf-8"></script>
+    <script>
+    // Copyright (c) 2013 Ryan Clark
+    // https://gist.github.com/rclark/5779673
+    L.TopoJSON = L.GeoJSON.extend({
+      addData: function(jsonData) {    
+        if (jsonData.type === "Topology") {
+          for (key in jsonData.objects) {
+            geojson = topojson.feature(jsonData, jsonData.objects[key]);
+            L.GeoJSON.prototype.addData.call(this, geojson);
+          }
+        }    
+        else {
+          L.GeoJSON.prototype.addData.call(this, jsonData);
+        }
+      }  
+    });
+    </script>
+    <script>
+
+        (function(){
+
+        'use strict'
+          
+        const map = L.map('worldmap',{maxZoom:10,minZoom:1.25}),
+          topoLayer = new L.TopoJSON(),
+          $countryName = $('.country-name'),
+          colorScale = d3.scale.linear()
+            .range(['#FFFDE7', '#FF8F00'])
+            .domain([2,8]);
+        
+        map.setView([20,0], 2);
+
+        var happinessByCountry;
+
+        d3.csv("data/Happiness Report/whr2017_topoJSON.csv",createHappinessMap);
+        $.getJSON('data/countries.topo.json').done(addTopoData);
+
+        function createHappinessMap(data){
+            happinessByCountry = d3.map();
+            data.forEach(function(d) {
+                happinessByCountry.set(d.Country, +d["Happiness score"])
+            });
+        }
+
+        function addTopoData(topoData){
+          topoLayer.addData(topoData);
+          topoLayer.addTo(map);
+          topoLayer.eachLayer(handleLayer);
+        }
+
+        function handleLayer(layer){
+            const countryName = layer.feature.properties.name;
+            const happinessScore = happinessByCountry.get(countryName);
+            let fillColor;
+
+            if (happinessScore){
+                fillColor = colorScale(happinessScore);    
+            }
+            else {
+                fillColor = '#f2f2f2'
+            }
+            
+            layer.setStyle({
+              fillColor : fillColor,
+              fillOpacity: 1,
+              color:'#555',
+              weight:1,
+              opacity:.5
+            });
+
+            layer.on({
+              mousemove : enterLayer,
+              mouseout: leaveLayer
+            });
+        }
+
+        function enterLayer(event){
+          const countryName = this.feature.properties.name;
+          const info = countryName + '<br>' + happinessByCountry.get(countryName);
+          $countryName.html(info).show();
+
+          const eventX = event.containerPoint.x + 220;
+          const eventY = event.containerPoint.y + 200;
+          
+          const tooltip = document.querySelector(".country-name");
+          tooltip.style.left = eventX + 'px';
+          tooltip.style.top = eventY + 'px';
+          
+          this.bringToFront();
+          this.setStyle({
+            weight:2,
+            opacity: 1
+          });
+        }
+
+        function leaveLayer(){
+          $countryName.hide();
+
+          this.bringToBack();
+          this.setStyle({
+            weight:1,
+            opacity:.5
+          });
+        }
+
+        }());
+    </script>
 </body>
 </html>
