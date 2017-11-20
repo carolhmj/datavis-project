@@ -57,17 +57,17 @@
     // Copyright (c) 2013 Ryan Clark
     // https://gist.github.com/rclark/5779673
     L.TopoJSON = L.GeoJSON.extend({
-      addData: function(jsonData) {    
-        if (jsonData.type === "Topology") {
-          for (key in jsonData.objects) {
-            geojson = topojson.feature(jsonData, jsonData.objects[key]);
-            L.GeoJSON.prototype.addData.call(this, geojson);
-          }
-        }    
-        else {
-          L.GeoJSON.prototype.addData.call(this, jsonData);
-        }
-      }  
+        addData: function(jsonData) {    
+            if (jsonData.type === "Topology") {
+                for (key in jsonData.objects) {
+                    geojson = topojson.feature(jsonData, jsonData.objects[key]);
+                    L.GeoJSON.prototype.addData.call(this, geojson);
+                }
+            }    
+            else {
+                L.GeoJSON.prototype.addData.call(this, jsonData);
+            }
+        }  
     });
     </script>
     <script>
@@ -77,11 +77,11 @@
         'use strict'
           
         const map = L.map('worldmap',{maxZoom:10,minZoom:1.25}),
-          topoLayer = new L.TopoJSON(),
-          $countryName = $('.country-name'),
-          colorScale = d3.scale.linear()
-            .range(['#FFFDE7', '#FF8F00'])
-            .domain([2,8]);
+        topoLayer = new L.TopoJSON(),
+        $countryName = $('.country-name'),
+        colorScale = d3.scale.linear()
+                    .range(['#FFFDE7', '#FF8F00'])
+                    .domain([2,8]);
         
         map.setView([20,0], 2);
 
