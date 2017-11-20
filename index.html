@@ -87,7 +87,7 @@
 
         var happinessByCountry;
 
-        d3.csv("data/Happiness Report/whr2017_topoJSON.csv",createHappinessMap);
+        d3.csv("data/HappinessReport/whr2017_topoJSON.csv",createHappinessMap);
         $.getJSON('data/countries.topo.json').done(addTopoData);
 
         function createHappinessMap(data){
