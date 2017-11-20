@@ -87,22 +87,24 @@
 
         var happinessByCountry;
 
-        d3.csv("data/HappinessReport/whr2017_topoJSON.csv",createHappinessMap);
+        d3.csv("data/HappinessReport/whr2017_topoJSON.csv",createHappinessHashMap);
         $.getJSON('data/countries.topo.json').done(addTopoData);
 
-        function createHappinessMap(data){
+        function createHappinessHashMap(data){
             happinessByCountry = d3.map();
             data.forEach(function(d) {
                 happinessByCountry.set(d.Country, +d["Happiness score"])
             });
         }
 
+        //add countries layers data to be shown on map
         function addTopoData(topoData){
-          topoLayer.addData(topoData);
-          topoLayer.addTo(map);
-          topoLayer.eachLayer(handleLayer);
+            topoLayer.addData(topoData);
+            topoLayer.addTo(map);
+            topoLayer.eachLayer(handleLayer);
         }
 
+        //set countries style, including color and set mouse event functions
         function handleLayer(layer){
             const countryName = layer.feature.properties.name;
             const happinessScore = happinessByCountry.get(countryName);
@@ -129,33 +131,43 @@
             });
         }
 
+        //when mouse enter layer (country), show tooltip
         function enterLayer(event){
-          const countryName = this.feature.properties.name;
-          const info = countryName + '<br>' + happinessByCountry.get(countryName);
-          $countryName.html(info).show();
+            const countryName = this.feature.properties.name;
+            const happinessScore = happinessByCountry.get(countryName);
+            let info;
 
-          const eventX = event.containerPoint.x + 220;
-          const eventY = event.containerPoint.y + 200;
-          
-          const tooltip = document.querySelector(".country-name");
-          tooltip.style.left = eventX + 'px';
-          tooltip.style.top = eventY + 'px';
-          
-          this.bringToFront();
-          this.setStyle({
-            weight:2,
-            opacity: 1
-          });
+            if (happinessScore){
+                info = `${countryName} <br> ${happinessScore}`;
+            }
+            else{
+                info = `${countryName} <br> sem dados`;
+            }
+            $countryName.html(info).show();
+
+            const eventX = event.containerPoint.x + 220;
+            const eventY = event.containerPoint.y + 200;
+
+            const tooltip = document.querySelector(".country-name");
+            tooltip.style.left = eventX + 'px';
+            tooltip.style.top = eventY + 'px';
+
+            this.bringToFront();
+            this.setStyle({
+                weight:2,
+                opacity: 1
+            });
         }
 
+        //when mouse leave layer (country), hide tooltip
         function leaveLayer(){
-          $countryName.hide();
+            $countryName.hide();
 
-          this.bringToBack();
-          this.setStyle({
-            weight:1,
-            opacity:.5
-          });
+            this.bringToBack();
+            this.setStyle({
+                weight:1,
+                opacity:.5
+            });
         }
 
         }());
