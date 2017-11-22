@@ -1,1 +1,21 @@
 /* CSS file for styling the visualizations */
+
+div#happinessFactorsContainer {
+	width: 90vw;
+	height: 50vh;
+	position: relative;
+}
+
+div#happinessFactors {
+	position: absolute;
+    text-decoration: underline;
+    -webkit-transform-origin: center;
+  	-moz-transform-origin: center;
+  	transform-origin: center;
+	-ms-transform: rotate(-270deg); 
+    -webkit-transform: rotate(-270deg);
+    transform: rotate(-270deg);
+}
+
+#happinessFactors svg {
+}

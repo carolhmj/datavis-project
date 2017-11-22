@@ -1,5 +1,3 @@
-/* JS file for the visualization scripts */
-
 //Charts definition
 var chart = dc.barChart("#happinessFactors");
 
@@ -92,12 +90,18 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 
 	console.log(filteredGroup.all().sort(function(x,y) {return y.value[ladderScore]-x.value[ladderScore];}).map(function (d) {return d.key[0]; /*d.country*/}));
 
+	//We swap the width and height so the graph is drawn correctly
+	var rect =  _bbox = chart.root().node().parentNode.getBoundingClientRect();
+	var chartWidth = _bbox.height;
+	var chartHeight = _bbox.width;
+	console.log('size: ' + chartWidth + ' ' + chartHeight);
+
 	chart.width(600)
 		 .height(1000)
-		 .gap(20)
+		 .gap(30)
 		 .x(d3.scale.ordinal().domain(filteredGroup.all().sort(function(x,y) {return y.value[ladderScore]-x.value[ladderScore];}).map(function (d) {return d.key[0]; /*d.country*/})))
 		 .xUnits(dc.units.ordinal)
-		 .margins({left: 20, top: 20, right: 20, bottom: 20})
+		 .margins({left: 0, top: 0, right: 0, bottom: 0})
 		 .brushOn(false)
 		 .elasticY(true)
 		 .dimension(countryDimension)
