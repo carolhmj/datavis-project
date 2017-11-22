@@ -96,12 +96,12 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 	var chartHeight = _bbox.width;
 	console.log('size: ' + chartWidth + ' ' + chartHeight);
 
-	chart.width(600)
-		 .height(1000)
-		 .gap(30)
+	chart.width(chartWidth)
+		 .height(chartHeight)
+		 .gap(20)
 		 .x(d3.scale.ordinal().domain(filteredGroup.all().sort(function(x,y) {return y.value[ladderScore]-x.value[ladderScore];}).map(function (d) {return d.key[0]; /*d.country*/})))
 		 .xUnits(dc.units.ordinal)
-		 .margins({left: 0, top: 0, right: 0, bottom: 0})
+		 .margins({left: 0, top: 0, right: 0, bottom: 40})
 		 .brushOn(false)
 		 .elasticY(true)
 		 .dimension(countryDimension)

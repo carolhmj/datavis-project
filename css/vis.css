@@ -1,21 +1,39 @@
 /* CSS file for styling the visualizations */
 
 div#happinessFactorsContainer {
-	width: 90vw;
-	height: 50vh;
-	position: relative;
+	width: 100%;
+	height: 200px;
 }
 
 div#happinessFactors {
+	margin-top:110px;
 	position: absolute;
-    text-decoration: underline;
-    -webkit-transform-origin: center;
-  	-moz-transform-origin: center;
-  	transform-origin: center;
+	-webkit-transform-origin: top;
+	-moz-transform-origin: top;
+	transform-origin: top;
 	-ms-transform: rotate(-270deg); 
-    -webkit-transform: rotate(-270deg);
-    transform: rotate(-270deg);
+	-webkit-transform: rotate(-270deg);
+	transform: rotate(-270deg);
 }
 
-#happinessFactors svg {
+div#happinessFactors svg{
+    text-decoration: underline;
+}
+
+@media screen and (max-width:800px) {
+    div#happinessFactors {
+		margin-left: 55vw;
+	}
+}
+
+@media screen and (min-width:801px) and (max-width:1366px) {
+    div#happinessFactors {
+		margin-left: 61vw;
+	}
+}
+
+@media screen and (min-width:1366px) {
+    div#happinessFactors {
+		margin-left: 64vw;
+	}
 }
