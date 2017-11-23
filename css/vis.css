@@ -5,15 +5,28 @@ div#happinessFactorsContainer {
 	height: 200px;
 }
 
+div#happinessFactorsLegend {
+	width: 100%;
+	display: flex;
+}
+
+.legend-item {
+	margin: 15px;
+}
+
 div#happinessFactors {
-	margin-top:110px;
+	margin-top: 110px;
 	position: absolute;
-	-webkit-transform-origin: top;
-	-moz-transform-origin: top;
 	transform-origin: top;
-	-ms-transform: rotate(-270deg); 
-	-webkit-transform: rotate(-270deg);
 	transform: rotate(-270deg);
+}
+
+#happinessFactors svg .y .tick text {
+	transform: translate(-10px, -16px) rotate(270deg);	
+}
+
+#happinessFactors svg .x .tick text {
+	transform: translate(-14px, 23px) rotate(270deg);
 }
 
 div#happinessFactors svg{

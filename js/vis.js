@@ -101,14 +101,13 @@ d3.csv("data/HappinessReport/whr2015.csv", function(data) {
 		 .gap(20)
 		 .x(d3.scale.ordinal().domain(filteredGroup.all().sort(function(x,y) {return y.value[ladderScore]-x.value[ladderScore];}).map(function (d) {return d.key[0]; /*d.country*/})))
 		 .xUnits(dc.units.ordinal)
-		 .margins({left: 0, top: 0, right: 0, bottom: 40})
+		 .margins({left: 40, top: 80, right: 0, bottom: 40})
 		 .brushOn(false)
 		 .elasticY(true)
 		 .dimension(countryDimension)
-		 // .group(filteredGroup)
 		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia))
 		 .keyAccessor(function(d) {return d.key[0];});	 
-
+	 
 	chart.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
 	chart.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
 	chart.stack(filteredGroup, explHealthyLife, sel_stack(explHealthyLife));
