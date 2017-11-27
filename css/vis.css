@@ -50,3 +50,13 @@ div#happinessFactors svg{
 		margin-left: 64vw;
 	}
 }
+
+div#happinessAndSuicideContainer {
+	width: 100%;
+	height: 700px;
+}
+
+div#happinessAndSuicide {
+	position: absolute;
+}
+
