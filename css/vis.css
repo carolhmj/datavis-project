@@ -2,7 +2,7 @@
 
 div#happinessFactorsContainer {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 }
 
 div#happinessFactorsLegend {
@@ -52,8 +52,8 @@ div#happinessFactors svg{
 }
 
 div#happinessAndSuicideContainer {
-	width: 100%;
-	height: 700px;
+	width: 80vh;
+	height: 80vh;
 }
 
 div#happinessAndSuicide {

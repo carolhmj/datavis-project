@@ -93,8 +93,9 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate) {
 }
 
 function buildHappinessFactors(happiness) {
-	var countryDimension = countryFacts.dimension((d) => [d.country, d.showHappinessFactors]);
-	countryDimension.top(Infinity).forEach(d => { console.log(d); d.showHappinessFactors = true; })
+	// var countryDimension = countryFacts.dimension((d) => [d.country, d.showHappinessFactors]);
+	var countryDimension = countryFacts.dimension((d) => d.country);
+	// countryDimension.top(Infinity).forEach(d => { console.log(d); d.showHappinessFactors = true; })
 	var factorsGroup = countryDimension.group().reduce(function (p, v) {
 		let country = happiness.get(v.country);
 		if (country) {
@@ -126,9 +127,17 @@ function buildHappinessFactors(happiness) {
 	});
 	console.log(factorsGroup.all());
 
+	let countriesWithHappinessScores = countries.values().filter(d => happiness.get(d.country)).sort((c1, c2) => {return happiness.get(c2.country).ladderScore - happiness.get(c1.country).ladderScore}).map(x => x.country);
+
+	let topBottomCountries = countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5));
+
 	var filteredGroup = filterBins(factorsGroup, function(d) {
-		return d.key[1]; //d.show
+		return $.inArray(d.key, topBottomCountries) >= 0; 
 	});
+
+	// var filteredGroup = filterBins(factorsGroup, function(d) {
+	// 	return d.key[1]; //d.show
+	// });
 
 	console.log(filteredGroup.all());
 
@@ -147,14 +156,15 @@ function buildHappinessFactors(happiness) {
 	happinessFactors.width(chartWidth)
 		 .height(chartHeight)
 		 .gap(20)
-		 .x(d3.scale.ordinal().domain(countries.values().map(d => d.country)))
+		 // .x(d3.scale.ordinal().domain(countries.values().map(d => d.country)))
+		 .x(d3.scale.ordinal().domain(topBottomCountries))
 		 .xUnits(dc.units.ordinal)
 		 .margins({left: 40, top: 80, right: 0, bottom: 40})
 		 .brushOn(false)
 		 .elasticY(true)
 		 .dimension(countryDimension)
-		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia))
-		 .keyAccessor(d => d.key[0]);	 
+		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia));
+		 // .keyAccessor(d => d.key[0]);	 
 	 
 	happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
 	happinessFactors.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
