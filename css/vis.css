@@ -60,3 +60,11 @@ div#happinessAndSuicide {
 	position: absolute;
 }
 
+div#happinessChangesContainer {
+	width: 100vh;
+	height: 80vw;
+}
+
+div#happinessChanges {
+	position: absolute;
+}
