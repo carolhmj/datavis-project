@@ -36,6 +36,14 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
             </section>
             <div id="worldmap"></div>
+            <div>
+              <input id="year-slider" type="range" min="1" max="3" steps="1" value="1" >
+            </div>
+            <ul class="range-labels">
+              <li class="active selected">Today</li>
+              <li>2 days</li>
+              <li>3 days</li>
+            </ul>
             <div class="country-name"></div>
             <section id="1">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
@@ -86,14 +94,18 @@
         map.setView([20,0], 2);
 
         var happinessByCountry;
+        var happinessData = [];
+        happinessData[0] = "data/HappinessReport/whr2017_topoJSON.csv";
+        happinessData[1] = "data/HappinessReport/whr2016_topoJSON.csv";
+        happinessData[2] = "data/HappinessReport/whr2015_topoJSON.csv";
 
-        d3.csv("data/HappinessReport/whr2017_topoJSON.csv",createHappinessHashMap);
+        d3.csv(happinessData[0],createHappinessHashMap);
         $.getJSON('data/countries.topo.json').done(addTopoData);
-
+            
         function createHappinessHashMap(data){
             happinessByCountry = d3.map();
             data.forEach(function(d) {
-                happinessByCountry.set(d.Country, +d["Happiness score"])
+                happinessByCountry.set(d.Country, (+d["Happiness score"]).toFixed(2))
             });
         }
 
@@ -159,6 +171,17 @@
             });
         }
 
+        //slider change callback
+        function onSliderChange(data){
+            createHappinessHashMap(data);
+            topoLayer.eachLayer(handleLayer);
+        }
+
+        //check if slider has changed
+        $('#year-slider').on('change',function(){
+            d3.csv(happinessData[this.value-1],onSliderChange);            
+        });
+
         //when mouse leave layer (country), hide tooltip
         function leaveLayer(){
             $countryName.hide();
@@ -171,6 +194,7 @@
         }
 
         }());
+
     </script>
 </body>
 </html>
