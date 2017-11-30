@@ -1,4 +1,4 @@
-// let happinessAndSuicide = dc.scatterPlot("#happinessAndSuicide");
+let happinessAndSuicide = dc.scatterPlot("#happinessAndSuicide");
 let happinessFactors = dc.barChart("#happinessFactors");
 let happinessChanges = dc.seriesChart("#happinessChanges");
 
@@ -54,9 +54,7 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate) {
 		}); 
 	});
 
-	// let happiness2015Map = d3.map();
 	happiness2015.forEach(function(d) {
-		// let data = {
 		let index = countriesData.findIndex(c => c.year == 2015 && c.country == d.country);
 		if (index > -1) {
 			countriesData[index][ladderScore] = +d[ladderScore];
@@ -72,35 +70,23 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate) {
 
 	countryFacts = crossfilter(countriesData);
 	
-	// let suicideRateMap = d3.map();
-	// suicideRate.filter(function(d) {
-	// 	return d.Sex === "Total" && d[timePeriod] === "2015";
-	// });
-
-	// suicideRate.forEach(function(d) {
-	// 	let data = {
-	// 		"Value" : +d.Value
-	// 	}
-	// 	suicideRateMap.set(d[referenceArea], data);
-	// });
-
-	// console.log(happiness2015Map);
-	// console.log(suicideRateMap);
-	// console.log(countries);
-
-	// countryFacts = crossfilter(countries.values());
-	// console.log(countryFacts.size());
+	suicideRate.filter(d => d.Sex == "Total");
+	suicideRate.forEach(function(d) {
+		let index = countriesData.findIndex(c => c.year == +d[timePeriod] && c.country == d[referenceArea]);
+		if (index > -1) {
+			countriesData[index].suicide = +d.Value;
+		}
+ 	});
 
 	buildHappinessChange();
 	buildHappinessFactors();
-	// buildHappinessAndSuicide(happiness2015Map, suicideRateMap);
-
+	buildHappinessAndSuicide();
 	dc.renderAll();
 }
 
 function buildHappinessChange() {
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
-	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);	
+	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);
 
 	let _bbox = happinessChanges.root().node().parentNode.getBoundingClientRect();
 
@@ -109,6 +95,7 @@ function buildHappinessChange() {
 					.xUnits(d3.time.years)
 					.x(d3.scale.linear().domain([2005,2017]))
 					.renderHorizontalGridLines(true)
+					.brushOn(false)
 					.seriesAccessor(d => d.key[0])
 					.keyAccessor(d => d.key[1])
 					.dimension(countryDimension)
@@ -118,7 +105,6 @@ function buildHappinessChange() {
 
 function buildHappinessFactors(happiness) {
 	var countryDimension = countryFacts.dimension(d => [d.country, d.year, d.happiness]);
-	countryDimension = countryDimension.filter(d => d[1] == 2015 );
 	var factorsGroup = countryDimension.group().reduce(function (p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) + v[explLogGDP];
 		p[explHealthyLife] = (p[explHealthyLife] | 0) + v[explHealthyLife];
@@ -148,7 +134,7 @@ function buildHappinessFactors(happiness) {
 	let topBottomCountries = countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5));
 
 	var filteredGroup = filterBins(factorsGroup, function(d) {
-		return $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
+		return d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
 	});
 
 	function sel_stack(elem) {
@@ -172,9 +158,8 @@ function buildHappinessFactors(happiness) {
 		 .elasticY(true)
 		 .dimension(countryDimension)
 		 .keyAccessor(d => d.key[0])
-		 .group(filteredGroup)
-		 .valueAccessor(d => d.value[explLogGDP]);
-		 // .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia));
+		 .valueAccessor(d => d.value[explLogGDP])
+		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia));
 	 
 	happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
 	happinessFactors.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
@@ -184,34 +169,27 @@ function buildHappinessFactors(happiness) {
 	happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
 }
 
-// function buildHappinessAndSuicide(happiness, suicideRate) {
-// 	let happinessAndSuicideDimension = countryFacts.dimension(function(d) {
-// 		let happy = happiness.get(d.country) ? happiness.get(d.country).ladderScore : 0;
-// 		if (happy == 0) console.log(d.country + " happy not found");
-// 		let suicide = suicideRate.get(d.country) ? suicideRate.get(d.country).Value : 0;
-// 		if (suicide == 0) console.log(d.country + " suicide not found");
-// 		return [happy, suicide, d.country];
-// 	});
-// 	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), function(d) {
-// 		return d.key[0] != 0 && d.key[1] != 0;
-// 	});
+function buildHappinessAndSuicide(happiness, suicideRate) {
+	let happinessAndSuicideDimension = countryFacts.dimension(d => [d.happiness, d.suicide, d.country, d.year]);
+	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[3] == 2015 && !isNaN(d.key[1]));
 
-// 	console.log(happinessAndSuicideDimension.top(Infinity));
-// 	console.log(happinessAndSuicideGroup.all());
+	console.log('happiness and suicide values');
+	console.log(happinessAndSuicideDimension.top(Infinity));
+	console.log(happinessAndSuicideGroup.all());
 
-// 	var rect =  _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
-// 	var chartWidth = _bbox.width;
-// 	var chartHeight = _bbox.height;
+	var rect =  _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
+	var chartWidth = _bbox.width;
+	var chartHeight = _bbox.height;
 
-// 	happinessAndSuicide.width(chartWidth)
-// 					   .height(chartHeight)
-// 					   .x(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[0]))))
-// 					   .y(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[1]))))
-// 					   .dimension(happinessAndSuicideDimension)
-// 					   .group(happinessAndSuicideGroup)
-// 					   .brushOn(false)
-// 					   .renderTitle(true)
-// 					   .title(function(d) {
-// 					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
-// 					   });		
-// }	
+	happinessAndSuicide.width(chartWidth)
+					   .height(chartHeight)
+					   .x(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[0]))))
+					   .y(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[1]))))
+					   .dimension(happinessAndSuicideDimension)
+					   .group(happinessAndSuicideGroup)
+					   .brushOn(false)
+					   .renderTitle(true)
+					   .title(function(d) {
+					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
+					   });		
+}	
