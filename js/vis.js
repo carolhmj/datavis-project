@@ -1,6 +1,7 @@
 let happinessAndSuicide = dc.scatterPlot("#happinessAndSuicide");
 let happinessFactors = dc.barChart("#happinessFactors");
 let happinessChanges = dc.seriesChart("#happinessChanges");
+let countryResiduals = dc.barChart("#countryResiduals");
 
 let explLogGDP = "Explained by: Log GDP per capita";
 let explSocialSupport = "Explained by: Social support";
@@ -81,7 +82,33 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate) {
 	buildHappinessChange();
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
+	buildCountryResiduals();
 	dc.renderAll();
+}
+
+function buildCountryResiduals() {
+	console.log('country residuals');
+	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
+	let residualGroup = countryDimension.group().reduceSum(d => d[residualPlusDystopia]);
+
+	let countriesWithResiduals = residualGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value - c1.value;}).map(d => d.key[0]);
+	let topBottomCountries = countriesWithResiduals.slice(0,5).concat(countriesWithResiduals.slice(-5));
+	console.log(topBottomCountries);
+	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) > -1 && !isNaN(d.value));
+
+	let _bbox = countryResiduals.root().node().parentNode.getBoundingClientRect();
+
+	countryResiduals.width(_bbox.width)
+					.height(_bbox.height)
+					.xUnits(dc.units.ordinal)
+					.x(d3.scale.ordinal().domain(topBottomCountries))
+					.elasticY(true)
+					.dimension(countryDimension)
+					.group(residualGroup)
+					.keyAccessor(d => d.key[0])
+					.renderHorizontalGridLines(true);
+
+
 }
 
 function buildHappinessChange() {
@@ -93,7 +120,7 @@ function buildHappinessChange() {
 	happinessChanges.width(_bbox.width)
 					.height(_bbox.height)
 					.xUnits(d3.time.years)
-					.x(d3.scale.linear().domain([2005,2017]))
+					.x(d3.scale.linear().domain([2006,2016]))
 					.renderHorizontalGridLines(true)
 					.brushOn(false)
 					.seriesAccessor(d => d.key[0])

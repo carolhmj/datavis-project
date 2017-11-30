@@ -61,10 +61,19 @@ div#happinessAndSuicide {
 }
 
 div#happinessChangesContainer {
-	width: 100vh;
-	height: 80vw;
+	width: 60vw;
+	height: 80vh;
 }
 
 div#happinessChanges {
+	position: absolute;
+}
+
+div#countryResidualsContainer {
+	width: 80vw;
+	height: 70vh;
+}
+
+div#countryResiduals {
 	position: absolute;
 }
