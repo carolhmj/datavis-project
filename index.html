@@ -35,15 +35,17 @@
                 <h1>Uma exploração da felicidade</h1>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
             </section>
-            <div id="worldmap"></div>
             <div>
-              <input id="year-slider" type="range" min="1" max="3" steps="1" value="1" >
+                <div>
+                  <input id="year-slider" type="range" min="1" max="3" steps="1" value="3" >
+                </div>
+                <ul class="range-labels">
+                  <li class="active">2015</li>
+                  <li class="active">2016</li>
+                  <li class="active">2017</li>
+                </ul>
             </div>
-            <ul class="range-labels">
-              <li class="active selected">Today</li>
-              <li>2 days</li>
-              <li>3 days</li>
-            </ul>
+            <div id="worldmap"></div>
             <div class="country-name"></div>
             <section id="1">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
@@ -95,9 +97,9 @@
 
         var happinessByCountry;
         var happinessData = [];
-        happinessData[0] = "data/HappinessReport/whr2017_topoJSON.csv";
+        happinessData[0] = "data/HappinessReport/whr2015_topoJSON.csv";
         happinessData[1] = "data/HappinessReport/whr2016_topoJSON.csv";
-        happinessData[2] = "data/HappinessReport/whr2015_topoJSON.csv";
+        happinessData[2] = "data/HappinessReport/whr2017_topoJSON.csv";
 
         d3.csv(happinessData[0],createHappinessHashMap);
         $.getJSON('data/countries.topo.json').done(addTopoData);
@@ -171,15 +173,24 @@
             });
         }
 
-        //slider change callback
-        function onSliderChange(data){
+        //slider input callback
+        function onSliderInput(data){
             createHappinessHashMap(data);
             topoLayer.eachLayer(handleLayer);
         }
 
         //check if slider has changed
-        $('#year-slider').on('change',function(){
-            d3.csv(happinessData[this.value-1],onSliderChange);            
+        $('#year-slider').on('input',function(){
+            d3.csv(happinessData[this.value-1], onSliderInput);
+            $('.range-labels li').removeClass('active selected');
+
+              var currentLabel = $('.range-labels').find('li:nth-child(' + this.value + ')');
+              currentLabel.addClass('active');
+              currentLabel.prevAll().addClass('active');            
+        });
+
+        $('.range-labels li').on('click',function() {
+            $('#year-slider').val(($(this).index()) + 1).trigger('input');
         });
 
         //when mouse leave layer (country), hide tooltip
