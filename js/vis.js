@@ -20,6 +20,7 @@ d3.queue()
 	.defer(d3.csv, "data/HappinessReport/whrAllYears.csv")
 	.defer(d3.csv, "data/HappinessReport/whr2015.csv")
 	.defer(d3.csv, "data/suicide_mortality.csv")
+	.defer(d3.csv, "data/CountriesRegionWHR.csv")
 	.await(buildCharts);
 
 function filterBins(source_group, f) {
@@ -32,26 +33,22 @@ function filterBins(source_group, f) {
 		};
 }
 
-let countries = d3.map();
 let countryFacts;
+let regionByCountry = d3.map();
 
-function setupCountry(data) {
-	let country = {
-		country: data[WP5Country],
-		onSuicideAndHappiness: true,
-		showHappinessFactors: true
-	};
-	countries.set(data.country, country);
-}
-
-function buildCharts(error, happinessAll, happiness2015, suicideRate) {
+function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	let countriesData = [];		
+
+	regions.forEach(d => {
+		regionByCountry.set(d.country, d.region);
+	});
 
 	happinessAll.forEach(function(d) {
 		countriesData.push({
 			country: d[WP5Country],
 			happiness: +d[lifeLadder],
-			year: +d.year
+			year: +d.year,
+			region: regionByCountry.get(d[WP5Country])
 		}); 
 	});
 
@@ -83,19 +80,24 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate) {
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
 	buildCountryResiduals();
+	buildRegionResiduals();
 	dc.renderAll();
 }
 
+function buildRegionResiduals() {
+	
+}
+
 function buildCountryResiduals() {
-	console.log('country residuals');
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let residualGroup = countryDimension.group().reduceSum(d => d[residualPlusDystopia]);
 
 	let countriesWithResiduals = residualGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value - c1.value;}).map(d => d.key[0]);
 	let topBottomCountries = countriesWithResiduals.slice(0,5).concat(countriesWithResiduals.slice(-5));
-	console.log(topBottomCountries);
 	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) > -1 && !isNaN(d.value));
 
+	let colorScale = d3.scale.quantize().domain([0,topBottomCountries.length-1]).range([1,2]);
+	
 	let _bbox = countryResiduals.root().node().parentNode.getBoundingClientRect();
 
 	countryResiduals.width(_bbox.width)
@@ -106,7 +108,10 @@ function buildCountryResiduals() {
 					.dimension(countryDimension)
 					.group(residualGroup)
 					.keyAccessor(d => d.key[0])
-					.renderHorizontalGridLines(true);
+					.renderHorizontalGridLines(true)
+					.colors(["#1900ff", "#ff0c00"])
+					.colorDomain([1,2])
+					.colorAccessor(d => colorScale($.inArray(d.key[0], topBottomCountries)));
 
 
 }
