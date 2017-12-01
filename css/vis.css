@@ -2,7 +2,7 @@
 
 div#happinessFactorsContainer {
 	width: 100%;
-	height: 200px;
+	height: 330px;
 }
 
 div#happinessFactorsLegend {
@@ -15,10 +15,11 @@ div#happinessFactorsLegend {
 }
 
 div#happinessFactors {
+	width: 200px;
 	margin-top: 110px;
 	position: absolute;
 	transform-origin: top;
-	transform: rotate(-270deg);
+	transform: translate(60vw, 0vw) rotate(-270deg);
 }
 
 #happinessFactors svg .y .tick text {
@@ -29,25 +30,28 @@ div#happinessFactors {
 	transform: translate(-14px, 23px) rotate(270deg);
 }
 
-div#happinessFactors svg{
-    text-decoration: underline;
+.dc-legend {
+	transform-origin: top;
+	transform: translate(50px, 45vw) rotate(270deg);
 }
 
-@media screen and (max-width:800px) {
-    div#happinessFactors {
-		margin-left: 55vw;
-	}
+.dc-legend-item {
+	text-decoration: underline;
+}
+
+.dc-legend-item:hover {
+	text-decoration: none;
 }
 
 @media screen and (min-width:801px) and (max-width:1366px) {
     div#happinessFactors {
-		margin-left: 61vw;
+		margin-left: 2vw;
 	}
 }
 
 @media screen and (min-width:1366px) {
     div#happinessFactors {
-		margin-left: 64vw;
+		margin-left: 5vw;
 	}
 }
 

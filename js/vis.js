@@ -149,12 +149,18 @@ function buildHappinessFactors(happiness) {
 		 .gap(20)
 		 .x(d3.scale.ordinal().domain(countries.values().map(d => d.country)))
 		 .xUnits(dc.units.ordinal)
-		 .margins({left: 40, top: 80, right: 0, bottom: 40})
+		 .margins({left: 40, top: 80, right: 170, bottom: 40})
 		 .brushOn(false)
 		 .elasticY(true)
 		 .dimension(countryDimension)
 		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia))
 		 .keyAccessor(d => d.key[0]);	 
+
+	happinessFactors.legend(dc.legend().horizontal(true).itemWidth(chartHeight/2).legendWidth(chartHeight));
+	dc.override(happinessFactors, 'legendables', function() {
+		var items = happinessFactors._legendables();
+		return items.reverse();
+	});
 	 
 	happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
 	happinessFactors.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
