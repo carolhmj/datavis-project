@@ -60,7 +60,6 @@ body {
   background: #FFFFFF;
   -webkit-appearance: none;
   margin-top: -6px;
-  margin-left: 2px;
 }
 
 #year-slider:focus {
@@ -80,7 +79,7 @@ body {
 }
 
 .range-labels .active {
-  color: darkorange;
+  color: #0e8373;
 }
 
 .range-labels span::before {
@@ -95,4 +94,18 @@ body {
   background: #b2b2b2;
   border-radius: 50%;
   z-index: -1;
+}
+
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+}
+
+.info {
+    padding: 6px 8px;
+    background: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
 }

@@ -89,9 +89,10 @@
             const map = L.map('worldmap',{maxZoom:10,minZoom:1.25}),
             topoLayer = new L.TopoJSON(),
             $countryName = $('.country-name'),
-            colorScale = d3.scale.linear()
-                        .range(['#FFFDE7', '#FF8F00'])
-                        .domain([2,8]);
+            colorScale = d3.scale.quantile()
+                        .range(['#edf8fb', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#0e8373'])
+                        .domain([2,8]),
+            legend = L.control({position: 'bottomright'});
             
             map.setView([20,0], 2);
     
@@ -101,7 +102,7 @@
             happinessData[1] = "data/HappinessReport/whr2016_topoJSON.csv";
             happinessData[2] = "data/HappinessReport/whr2017_topoJSON.csv";
     
-            d3.csv(happinessData[0],createHappinessHashMap);
+            d3.csv(happinessData[2],createHappinessHashMap);
             $.getJSON('data/countries.topo.json').done(addTopoData);
                 
             function createHappinessHashMap(data){
@@ -128,7 +129,7 @@
                     fillColor = colorScale(happinessScore);    
                 }
                 else {
-                    fillColor = '#f2f2f2'
+                    fillColor = '#dddddd'
                 }
                 
                 layer.setStyle({
@@ -144,6 +145,24 @@
                   mouseout: leaveLayer
                 });
             }
+
+            //add map colors legend
+            legend.onAdd = function (map) {
+                var legendContainer = L.DomUtil.create('div', 'info legend'),
+                    grades = [0, 3, 4, 5, 6, 7];
+                //generate a label with a colored square for each grade interval representing the color quantiles
+                for (var i = 0; i < grades.length; i++) {
+                    legendContainer.innerHTML +=
+                        //sum 0.01 because the color quantiles are not exact
+                        '<i style="background: ' + colorScale(grades[i]+0.01) + ' "></i> ' +
+                        grades[i] + (grades[i + 1] ? ' &ndash;' + grades[i + 1] + '<br>' : '+');
+                }
+
+                return legendContainer;
+            };
+
+            legend.addTo(map);
+
     
             //when mouse enter layer (country), show tooltip
             function enterLayer(event){
