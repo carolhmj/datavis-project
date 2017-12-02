@@ -2,6 +2,7 @@ let happinessAndSuicide = dc.scatterPlot("#happinessAndSuicide");
 let happinessFactors = dc.barChart("#happinessFactors");
 let happinessChanges = dc.seriesChart("#happinessChanges");
 let countryResiduals = dc.barChart("#countryResiduals");
+let regionResiduals = dc.barChart("#regionResiduals");
 
 let explLogGDP = "Explained by: Log GDP per capita";
 let explSocialSupport = "Explained by: Social support";
@@ -66,6 +67,10 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 		}
 	});
 
+	countriesData.filter(d => d.year == 2015).forEach(d => {
+		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + 'is NaN residualPlusDystopia');}
+	});
+
 	countryFacts = crossfilter(countriesData);
 	
 	suicideRate.filter(d => d.Sex == "Total");
@@ -85,7 +90,46 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 }
 
 function buildRegionResiduals() {
-	
+	let regionDimension = countryFacts.dimension(d => [d.region, d.year]);
+	let residualGroup = regionDimension.group().reduce(
+		(p,v) => {
+			if (!isNaN(v[residualPlusDystopia])) {
+				++p.count; 
+				p.sum += v[residualPlusDystopia];
+			}
+			return p;
+		},
+		(p,v) => {
+			if (!isNaN(residualPlusDystopia)) {
+				--p.count;
+				p.sum -= v[residualPlusDystopia];
+			}
+		},
+		() => {
+			return {sum: 0, count: 0}
+		}
+	);
+
+	// let allRegions1 = [...new Set(regionByCountry.values())];
+	// console.log(allRegions1);
+
+	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && !isNaN(d.value.sum) && !isNaN(d.value.count));
+
+	let allRegions = residualGroup.all().sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count).map(d => d.key[0]).filter(d => !(typeof d == "undefined"));
+	console.log(allRegions);
+
+	let _bbox = regionResiduals.root().node().parentNode.getBoundingClientRect();
+
+	regionResiduals.width(_bbox.width)
+				   .height(_bbox.height)
+				   .x(d3.scale.ordinal().domain(allRegions))
+				   .xUnits(dc.units.ordinal)
+				   .elasticY(true)
+				   .dimension(regionDimension)
+				   .group(residualGroup)
+				   .keyAccessor(d => d.key[0])
+				   .valueAccessor(d => d.value.sum / d.value.count)
+				   .renderHorizontalGridLines(true);
 }
 
 function buildCountryResiduals() {
@@ -204,10 +248,6 @@ function buildHappinessFactors(happiness) {
 function buildHappinessAndSuicide(happiness, suicideRate) {
 	let happinessAndSuicideDimension = countryFacts.dimension(d => [d.happiness, d.suicide, d.country, d.year]);
 	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[3] == 2015 && !isNaN(d.key[1]));
-
-	console.log('happiness and suicide values');
-	console.log(happinessAndSuicideDimension.top(Infinity));
-	console.log(happinessAndSuicideGroup.all());
 
 	var rect =  _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.width;

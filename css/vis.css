@@ -77,3 +77,12 @@ div#countryResidualsContainer {
 div#countryResiduals {
 	position: absolute;
 }
+
+div#regionResidualsContainer {
+	width: 85vw;
+	height: 70vh;
+}
+
+div#regionResiduals {
+	position: absolute;
+}
