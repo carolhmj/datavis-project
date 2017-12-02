@@ -234,7 +234,7 @@ function buildHappinessFactors(happiness) {
 		 .keyAccessor(d => d.key[0])
 		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia));
 
-	happinessFactors.legend(dc.legend().horizontal(true).itemWidth(chartHeight/2).legendWidth(chartHeight));
+
 	dc.override(happinessFactors, 'legendables', function() {
 		var items = happinessFactors._legendables();
 		return items.reverse();
@@ -285,12 +285,17 @@ $(document).ready(function() {
 });
 
 function resizeChart() {
-	var rect =  _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
+	var rect = _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.height;
 	var chartHeight = _bbox.width;
 	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
 	happinessFactors.width(chartWidth)
 					.height(chartHeight)
-					.legend(dc.legend().horizontal(true).itemWidth(chartHeight/2).legendWidth(chartHeight));
+					.legend(dc.legend().x($("#happinessFactors").width())
+										.y(chartHeight)
+										.rotation(270)
+										.horizontal(true)
+										.itemWidth(250)
+										.legendWidth(chartHeight));
 	dc.renderAll();
 }
