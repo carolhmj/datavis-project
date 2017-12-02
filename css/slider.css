@@ -23,7 +23,6 @@
 }
 
 #year-slider::-webkit-slider-thumb {
-  ;
   border: 1px solid #00001E;
   height: 16px;
   width: 16px;

@@ -42,7 +42,7 @@ function WorldMap(){
             fillColor = colorScale(happinessScore);    
         }
         else {
-            fillColor = '#dddddd';
+            fillColor = '#ffffff'
         }
         
         layer.setStyle({
@@ -68,10 +68,10 @@ function WorldMap(){
         for (var i = 0; i < grades.length; i++) {
             legendContainer.innerHTML +=
                 //sum 0.01 because the color quantiles are not exact
-                '<i style="background: ' + colorScale(grades[i]+0.01) + ' "></i> ' +
+                '<i style="background: ' + colorScale(grades[i]+0.01) + '; border: thin solid gray;"></i> ' +
                 grades[i] + (grades[i + 1] ? ' &ndash;' + grades[i + 1] + '<br>' : '+');
         }
-        legendContainer.innerHTML += ' <br><i style="background: #dddddd "></i> N/A';
+        legendContainer.innerHTML += ' <br><i style="background: #ffffff; border: thin solid gray;"></i> N/A';
         return legendContainer;
     };
 
