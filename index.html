@@ -20,6 +20,9 @@
     <!--<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
     integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>-->
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="css/vis.css">
 
@@ -31,12 +34,29 @@
 
 </head>
 <body>
-    <div id="wrapper">
-        <div id="menu">
-            <a href="#start" class="menu_link">Início</a>
-            <a href="#1" class="menu_link" >Seção 1</a>
-            <a href="#2" class="menu_link">Seção 2</a>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href=""><i class="fa fa-pie-chart"></i> Explorando a felicidade</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                    <a class="nav-link" href="#start">Início <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#1">Seção 1</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#2">Seção 2</a>
+                    </li>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </nav>
+    <div class="container">
         <div id="main">
             <div id="start" class="section">
                 <h1>Uma exploração da felicidade</h1>
@@ -46,14 +66,6 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
                 <div id="happinessFactorsContainer">
                     <div id="happinessFactors"></div>
-                </div>
-                <div id="happinessFactorsLegend">
-                    <div class="legend-item">
-                        <span>Explained by: Log GDP</span>
-                    </div>
-                    <div class="legend-item">
-                        <span>Explained by: Healthy life expectancy</span>
-                    </div>
                 </div>
             </div>
             
@@ -82,13 +94,17 @@
                 </div>
             </div>            
         </div>
-        <div id="footer">
-            <h4>Projeto final para a disciplina de Visualização de Dados (2017.2)</h4>
-            <h5>Universidade Federal do Ceará</h5>
+    </div>
+    <div class="footer">
+        <div class="container">
+            <h5>Projeto final para a disciplina de Visualização de Dados (2017.2)</h5>
+            <h6>Universidade Federal do Ceará</h6>
             <p><strong>Professora:</strong> <a href="https://emanueles.github.io" target="_blank">Emanuele Santos</a></p>
             <p><strong>Autores:</strong> <a href="#" target="_blank">Carol Herbster</a>, <a href="https://erickkelvin.github.io" target="_blank">Erick Santos</a> e <a href="#" target="_blank">Mariana Fontenele</a></p>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="js/site.js" charset="utf-8"></script>
     <script src="js/vis.js" charset="utf-8"></script>
 </body>

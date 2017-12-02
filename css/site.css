@@ -7,21 +7,15 @@
 
 html, body {
     font-family: avenirNext;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    text-align: center;
 }
 
-#wrapper {
-    min-height:100%;
-    position:relative;
+.navbar {
+    background-color: #0e8373;
 }
 
 #main {
     min-height:100%;
-    margin: 0 auto;
-    padding: 35px 15vw 150px;
+    padding-top:70px;
     text-align:left;
     transition: ease 1s;
 }
@@ -30,8 +24,9 @@ html, body {
     margin-bottom:50px;
 }
 
-h1 {
+h2 {
     text-align:center;
+    color: #0e8373;
     transition: ease 1s;
 }
 
@@ -39,39 +34,7 @@ a {
     transition: ease .5s;
 }
 
-#menu {
-    width:100%;
-    height:35px;
-    background-color: #444;
-    border-bottom: 1px solid #000;
-    color: #fff;
-    line-height: 36px;
-    position:fixed;
-    z-index: 999;
-    text-align: left;
-    padding: 0vh 15vw;
-    font-size: 14px;
-    transition: ease 1s;
-}
-
-#menu a {
-    color: white;
-    margin-right:20px;
-    text-decoration: none;
-}
-
-#menu a:hover {
-    color: lightgray;
-}
-
-#footer {
-    position:absolute;
-    bottom:0px;
-    left:0px;
-    right:0px;
-    padding:10px 15vw;
-    height:100px;
-    z-index:1;
+.footer {
     text-align: left;
     background-color: #fafafa;
     border-top: 1px #f1f1f1 solid;
@@ -79,22 +42,22 @@ a {
     color: rgb(145, 145, 145);
 }
 
-#footer h4 {
+.footer h5 {
     margin: 0;
     margin-top:5px;
 }
 
-#footer h5 {
+.footer h6 {
     font-weight: normal;
     margin: 5px 0px 15px 0px;
 }
 
-#footer p {
+.footer p {
     margin: 6px 0px;
     font-size:14px;
 }
 
-#footer a {
+.footer a {
     color: rgb(145, 145, 145);
     text-decoration: none;
 }
