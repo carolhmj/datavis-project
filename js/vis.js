@@ -80,13 +80,14 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 			countriesData[index].suicide = +d.Value;
 		}
  	});
-
 	buildHappinessChange();
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
 	buildCountryResiduals();
 	buildRegionResiduals();
 	dc.renderAll();
+
+	resizeChart();
 }
 
 function buildRegionResiduals() {
@@ -249,7 +250,7 @@ function buildHappinessFactors(happiness) {
 }
 
 function buildHappinessAndSuicide(happiness, suicideRate) {
-	console.log('buildHappinessAndSuicide');
+	
 	let happinessAndSuicideDimension = countryFacts.dimension(d => [d.happiness, d.suicide, d.country, d.year]);
 	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[3] == 2015 && !isNaN(d.key[1]));
 
@@ -258,9 +259,10 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 	var chartHeight = _bbox.height;
 
 	var regions = [...new Set(regionByCountry.values())].filter(d => !(typeof d == "undefined"));
-	console.log(regions);
-	var domain = d3.scale.ordinal().domain(regions).range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
-
+	var domain = d3.scale.ordinal()
+						 .domain(regions)
+						 .range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
+						 
 	happinessAndSuicide.width(chartWidth)
 					   .height(chartHeight)
 					   .x(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[0]))))
@@ -277,10 +279,6 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 }	
 	
 $(window).on("resize", function() {
-	resizeChart();
-});
-
-$(document).ready(function() {
 	resizeChart();
 });
 
