@@ -28,14 +28,14 @@ body {
   display: none;
 }
 
-.mapLegend {
+.map-legend {
     padding: 6px 8px;
     background: white;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 }
 
-.mapLegend i {
+.map-legend i {
     width: 18px;
     height: 18px;
     float: left;

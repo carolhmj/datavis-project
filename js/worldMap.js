@@ -61,7 +61,7 @@ function WorldMap(){
 
     //add map colors legend
     legend.onAdd = function (map) {
-        var legendContainer = L.DomUtil.create('div', 'mapLegend'),
+        var legendContainer = L.DomUtil.create('div', 'map-legend'),
             grades = [0, 3, 4, 5, 6, 7];
 
         //generate a label with a colored square for each grade interval representing the color quantiles
