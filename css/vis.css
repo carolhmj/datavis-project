@@ -43,11 +43,37 @@ div#happinessFactors {
 }
 
 div#happinessAndSuicideContainer {
-	width: 100%;
-	height: 700px;
+	width: 80vh;
+	height: 80vh;
 }
 
 div#happinessAndSuicide {
 	position: absolute;
 }
 
+div#happinessChangesContainer {
+	width: 60vw;
+	height: 80vh;
+}
+
+div#happinessChanges {
+	position: absolute;
+}
+
+div#countryResidualsContainer {
+	width: 80vw;
+	height: 70vh;
+}
+
+div#countryResiduals {
+	position: absolute;
+}
+
+div#regionResidualsContainer {
+	width: 85vw;
+	height: 70vh;
+}
+
+div#regionResiduals {
+	position: absolute;
+}
