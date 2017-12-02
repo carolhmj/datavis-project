@@ -23,7 +23,7 @@ div#happinessFactors {
 }
 
 #happinessFactors svg .y .tick text {
-	transform: translate(-10px, -16px) rotate(270deg);	
+	transform: translate(-10px, -16px) rotate(270deg);
 }
 
 #happinessFactors svg .x .tick text {
@@ -31,8 +31,7 @@ div#happinessFactors {
 }
 
 .dc-legend {
-	transform-origin: top;
-	transform: translate(50px, 64vw) rotate(270deg);
+	transform: translate(200px, 75vw) rotate(270deg);
 }
 
 .dc-legend-item {

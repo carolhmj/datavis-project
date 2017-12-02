@@ -203,12 +203,20 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 }
 
 $(window).on("resize", function() {
+	resizeChart();
+});
+
+$(document).ready(function() {
+	resizeChart();
+});
+
+function resizeChart() {
 	var rect =  _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.height;
 	var chartHeight = _bbox.width;
-	$("#happinessFactorsContainer").css("margin-left",chartHeight - 80);
+	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
 	happinessFactors.width(chartWidth)
 					.height(chartHeight)
 					.legend(dc.legend().horizontal(true).itemWidth(chartHeight/2).legendWidth(chartHeight));
 	dc.renderAll();
-});
+}
