@@ -244,6 +244,7 @@ function buildHappinessFactors(happiness) {
 }
 
 function buildHappinessAndSuicide(happiness, suicideRate) {
+	console.log('buildHappinessAndSuicide');
 	let happinessAndSuicideDimension = countryFacts.dimension(d => [d.happiness, d.suicide, d.country, d.year]);
 	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[3] == 2015 && !isNaN(d.key[1]));
 
@@ -251,7 +252,8 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 	var chartWidth = _bbox.width;
 	var chartHeight = _bbox.height;
 
-	var regions = [...new Set(regionByCountry.values())];
+	var regions = [...new Set(regionByCountry.values())].filter(d => !(typeof d == "undefined"));
+	console.log(regions);
 	var domain = d3.scale.ordinal().domain(regions).range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
 
 	happinessAndSuicide.width(chartWidth)
@@ -263,8 +265,9 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 					   .brushOn(false)
 					   .renderTitle(true)
 					   .colors(domain)
-					   .colorAccessor(d => regionByCountry.get(d.key[2]))
+					   .colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[2]) : null)
 					   .title(function(d) {
 					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
-					   });		
+					   });				   		
 }	
+	
