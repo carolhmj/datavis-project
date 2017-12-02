@@ -19,7 +19,7 @@ div#happinessFactors {
 	margin-top: 110px;
 	position: absolute;
 	transform-origin: top;
-	transform: translate(60vw, 0vw) rotate(-270deg);
+	transform: rotate(-270deg);
 }
 
 #happinessFactors svg .y .tick text {
@@ -32,7 +32,7 @@ div#happinessFactors {
 
 .dc-legend {
 	transform-origin: top;
-	transform: translate(50px, 45vw) rotate(270deg);
+	transform: translate(50px, 64vw) rotate(270deg);
 }
 
 .dc-legend-item {
@@ -41,18 +41,6 @@ div#happinessFactors {
 
 .dc-legend-item:hover {
 	text-decoration: none;
-}
-
-@media screen and (min-width:801px) and (max-width:1366px) {
-    div#happinessFactors {
-		margin-left: 2vw;
-	}
-}
-
-@media screen and (min-width:1366px) {
-    div#happinessFactors {
-		margin-left: 5vw;
-	}
 }
 
 div#happinessAndSuicideContainer {
