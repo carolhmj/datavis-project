@@ -110,9 +110,6 @@ function buildRegionResiduals() {
 		}
 	);
 
-	// let allRegions1 = [...new Set(regionByCountry.values())];
-	// console.log(allRegions1);
-
 	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && !isNaN(d.value.sum) && !isNaN(d.value.count));
 
 	let allRegions = residualGroup.all().sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count).map(d => d.key[0]).filter(d => !(typeof d == "undefined"));
@@ -129,7 +126,8 @@ function buildRegionResiduals() {
 				   .group(residualGroup)
 				   .keyAccessor(d => d.key[0])
 				   .valueAccessor(d => d.value.sum / d.value.count)
-				   .renderHorizontalGridLines(true);
+				   .renderHorizontalGridLines(true)
+				   .colors(["#0e8373"]);
 }
 
 function buildCountryResiduals() {
@@ -153,7 +151,7 @@ function buildCountryResiduals() {
 					.group(residualGroup)
 					.keyAccessor(d => d.key[0])
 					.renderHorizontalGridLines(true)
-					.colors(["#1900ff", "#ff0c00"])
+					.colors(["#0e8373", "#DAF7A6"])
 					.colorDomain([1,2])
 					.colorAccessor(d => colorScale($.inArray(d.key[0], topBottomCountries)));
 
@@ -253,6 +251,9 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 	var chartWidth = _bbox.width;
 	var chartHeight = _bbox.height;
 
+	var regions = [...new Set(regionByCountry.values())];
+	var domain = d3.scale.ordinal().domain(regions).range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
+
 	happinessAndSuicide.width(chartWidth)
 					   .height(chartHeight)
 					   .x(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[0]))))
@@ -261,6 +262,8 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 					   .group(happinessAndSuicideGroup)
 					   .brushOn(false)
 					   .renderTitle(true)
+					   .colors(domain)
+					   .colorAccessor(d => regionByCountry.get(d.key[2]))
 					   .title(function(d) {
 					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
 					   });		
