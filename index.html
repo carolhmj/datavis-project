@@ -40,8 +40,8 @@
                   <input id="year-slider" type="range" min="1" max="3" steps="1" value="3" >
                 </div>
                 <ul class="range-labels">
-                  <span class="active">2015</span>
-                  <span class="active">2016</span>
+                  <span>2015</span>
+                  <span>2016</span>
                   <span class="active">2017</span>
                 </ul>
             </div>
@@ -150,6 +150,7 @@
             legend.onAdd = function (map) {
                 var legendContainer = L.DomUtil.create('div', 'info legend'),
                     grades = [0, 3, 4, 5, 6, 7];
+
                 //generate a label with a colored square for each grade interval representing the color quantiles
                 for (var i = 0; i < grades.length; i++) {
                     legendContainer.innerHTML +=
@@ -157,7 +158,7 @@
                         '<i style="background: ' + colorScale(grades[i]+0.01) + ' "></i> ' +
                         grades[i] + (grades[i + 1] ? ' &ndash;' + grades[i + 1] + '<br>' : '+');
                 }
-
+                legendContainer.innerHTML += ' <br><i style="background: #dddddd "></i> N/A';
                 return legendContainer;
             };
 
@@ -215,9 +216,7 @@
 
                 //update year label colors
                 $('.range-labels span').removeClass('active');
-                const currentLabel = $('.range-labels').find('span:nth-child(' + this.value + ')');
-                currentLabel.addClass('active');
-                currentLabel.prevAll().addClass('active');
+                $('.range-labels').find('span:nth-child(' + this.value + ')').addClass('active');;
             });
     
             //check if year label was clicked
