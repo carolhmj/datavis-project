@@ -28,25 +28,71 @@ body {
   display: none;
 }
 
+.slider-container {
+  max-width: 35%;
+  margin: auto;
+}
+
 #year-slider{
-  width: 200px;
+  width: 400px;
   margin-top: 25px;
   margin-left: 54px;
   cursor: pointer;
+  -webkit-appearance: none;
 }
 
+#year-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  box-: 1px 1px 1px #000000;
+  background: #B4B4B4;
+  border-radius: 1px;
+  border: 0px solid #010101;
+  margin-top: -24px;
+}
+
+#year-slider::-webkit-slider-thumb {
+  ;
+  border: 1px solid #00001E;
+  height: 16px;
+  width: 16px;
+  border-radius: 15px;
+  background: #FFFFFF;
+  -webkit-appearance: none;
+  margin-top: -6px;
+  margin-left: 2px;
+}
+
+#year-slider:focus {
+  outline: none;
+}
 .range-labels {
   display:flex;
   margin-top: 5px;
   color: #c2c2c2;
 }
 
-.range-labels li {
-  margin-right: 60px;
+.range-labels span {
+  position: relative;
+  margin-right: 159px;
   cursor: pointer;
   font-weight: bold;
 }
 
 .range-labels .active {
   color: darkorange;
+}
+
+.range-labels span::before {
+  position: absolute;
+  top: -25px;
+  right: 0;
+  left: 0;
+  content: "";
+  margin: 0 auto;
+  width: 9px;
+  height: 9px;
+  background: #b2b2b2;
+  border-radius: 50%;
+  z-index: -1;
 }
