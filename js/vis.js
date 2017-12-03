@@ -271,11 +271,6 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 	yValue[0] -= 0.5;
 	yValue[1] += 0.5;
 
-	dc.override(happinessAndSuicide, 'legendables', function() {
-		var items = happinessAndSuicide._legendables();
-		return items.reverse();
-	});
-
 	happinessAndSuicide.width(chartWidth)
 					   .height(chartHeight)
 					   .x(d3.scale.linear().domain(xValue))
@@ -289,9 +284,7 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 					   .title(function(d) {
 					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
 					   })
-					   .symbolSize(15)
-					   .legend(dc.legend());
-
+					   .symbolSize(15);
 }	
 	
 $(window).on("resize", function() {
