@@ -1,7 +1,7 @@
 function WorldMap(){
     const map = L.map('worldmap',{maxZoom:10,minZoom:1.25}),
     topoLayer = new L.TopoJSON(),
-    $countryName = $('.country-name'),
+    $tooltip = $('.map-tooltip'),
     colorScale = d3.scale.quantile()
                 .range(['#edf8fb', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#0e8373'])
                 .domain([2,8]),
@@ -90,12 +90,11 @@ function WorldMap(){
         else{
             info = `${countryName} <br> sem dados`;
         }
-        $countryName.html(info).show();
+        $tooltip.html(info).show();
 
-        const eventX = event.containerPoint.x + 220;
-        const eventY = event.containerPoint.y + 200;
-
-        const tooltip = document.querySelector(".country-name");
+        const eventX = event.containerPoint.x + 15;
+        const eventY = event.containerPoint.y + 15;
+        const tooltip = document.querySelector(".map-tooltip");
         tooltip.style.left = eventX + 'px';
         tooltip.style.top = eventY + 'px';
 
@@ -108,7 +107,7 @@ function WorldMap(){
 
     //when mouse leave layer (country), hide tooltip
     function leaveLayer(){
-        $countryName.hide();
+        $tooltip.hide();
 
         this.bringToBack();
         this.setStyle({
