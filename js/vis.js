@@ -89,6 +89,8 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	buildCountryResiduals();
 	buildRegionResiduals();
 	dc.renderAll();
+	window.onload = happinessChangesLegend();
+
 }
 
 function buildRegionResiduals() {
@@ -187,33 +189,6 @@ function buildHappinessChange() {
 					.colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[0]) : null)
 					.title(d => d.key[0])
 					.group(happinessGroup);
-
-			//when DOM is ready, calculate lines info
-			window.onload = function(){
-				const lines = $('#happinessChanges svg .sub');
-
-				for (let i = 0; i < lines.length; i++) {
-					const country = lines[i].querySelector('.dc-tooltip circle title').textContent,
-						  box = lines[i].getBoundingClientRect(),
-						  lastCircle = lines[i].querySelector('circle:last-child'),
-						  x = lastCircle.attributes.cx.value,
-						  y = lastCircle.attributes.cy.value;
-
-						//set interval to check if cx and cy exist
-						const checkExist = setInterval(function() {
-							if (x && y) {
-								//ends checking interval
-								clearInterval(checkExist);
-								d3.select("#happinessChanges svg")
-								  .append("text")
-								  .attr("x", x)
-								  .attr("y", y)
-								  .style({'font-family': 'Helvetica', 'font-size': 10, 'fill': '#484848'})
-								  .text(country);
-						}
-					}, 100)
-				}
-			};
 }
 
 function buildHappinessFactors(happiness) {
@@ -323,6 +298,39 @@ $(document).ready(function() {
 	resizeChart();
 });
 
+function happinessChangesLegend(){
+	const lines = $('#happinessChanges svg .sub');
+
+	for (let i = 0; i < lines.length; i++) {
+		const country = lines[i].querySelector('.dc-tooltip circle title').textContent,
+			  box = lines[i].getBoundingClientRect(),
+			  lastCircle = lines[i].querySelector('circle:last-child');
+
+			//set interval to check if cx and cy exist
+			const checkExist = setInterval(function() {
+				if (lastCircle.attributes.cx.value && lastCircle.attributes.cy.value) {
+					x = lastCircle.attributes.cx.value,
+					y = lastCircle.attributes.cy.value;
+					//ends checking interval
+					clearInterval(checkExist);
+					d3.select("#happinessChanges svg")
+					  .append("text")
+					  .attr("x", x)
+					  .attr("y", y)
+					  .style({'font-family': 'Helvetica', 'font-size': 10, 'fill': '#484848'})
+					  .text(country);
+
+					  //puts United Kingdom label a little lower so it doesn't show over "United States" label
+					  if (country == "United Kingdom"){
+						y = ((+y)+25).toString();
+						document.querySelector("#happinessChanges > svg > text:last-child")
+						.setAttribute("y",y)
+					  }
+				}
+		}, 100)
+	}
+};
+
 function resizeChart() {
 	var rect = _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.height;
@@ -337,4 +345,5 @@ function resizeChart() {
 										.itemWidth(250)
 										.legendWidth(chartHeight));
 	dc.renderAll();
+	happinessChangesLegend();
 }
