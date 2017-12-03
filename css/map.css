@@ -1,0 +1,43 @@
+* {
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  box-sizing:border-box;
+}
+
+body,html,#worldmap {
+  height: 500px;
+}
+
+body {
+  color: #333;
+  font-family: sans-serif;
+}
+
+#worldmap {
+  background: white;
+  height: 500px;
+}
+
+.map-tooltip {
+  position: absolute;
+  background: rgba(0,0,0,.75);
+  color: white;
+  padding: .5em .75em;
+  font-size: 1em;
+  display: none;
+  z-index: 450;
+}
+
+.map-legend {
+    padding: 6px 8px;
+    background: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.map-legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+}

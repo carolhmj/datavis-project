@@ -8,30 +8,27 @@
 
     <link rel="stylesheet" href="css/dc.css">
     <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purT +FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
     integrity="sha256-LcmP8hlMTofQrGU6W2q3tUnDnDZ1QVraxfMkP060ekM=" crossorigin=""/>
-
     <script src="js/crossfilter.js" charset="utf-8"></script>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="https://d3js.org/d3-queue.v3.min.js"></script>
     <script src="js/dc.js" charset="utf-8"></script>
-
+     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" charset="utf-8"></script>
-    <!--<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
-    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>-->
-
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
 
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/slider.css">
     <link rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="css/vis.css">
 
-    <style>
-
-    #mapid { height: 180px; }
-
-    </style>
-
+    <script src="js/leafletMapSetup.js" charset="utf-8"></script>
+    <script src="js/worldMap.js" charset="utf-8"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -61,6 +58,21 @@
             <div id="top" class="section">
                 <h1>Uma exploração da felicidade</h1>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
+
+                <div class="slider-container">
+                    <div>
+                      <input id="year-slider" type="range" min="1" max="3" steps="1" value="3" >
+                    </div>
+                    <ul class="range-labels">
+                      <span>2015</span>
+                      <span>2016</span>
+                      <span class="active">2017</span>
+                    </ul>
+                </div>
+                <div id="worldmap">
+                    <div class="map-tooltip"></div>
+                </div>
+                
             </div>
             <div id="1" class="section">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
@@ -103,7 +115,10 @@
             <p><strong>Autores:</strong> <a href="#" target="_blank">Carol Herbster</a>, <a href="https://erickkelvin.github.io" target="_blank">Erick Santos</a> e <a href="#" target="_blank">Mariana Fontenele</a></p>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" 
+    <script>
+        WorldMap();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="js/site.js" charset="utf-8"></script>
     <script src="js/vis.js" charset="utf-8"></script>
