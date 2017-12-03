@@ -73,3 +73,7 @@ div#regionResidualsContainer {
 div#regionResiduals {
 	position: absolute;
 }
+
+.hidden {
+	display: none;
+}

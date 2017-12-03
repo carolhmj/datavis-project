@@ -308,7 +308,7 @@ function happinessChangesLegend(){
 
 			//set interval to check if cx and cy exist
 			const checkExist = setInterval(function() {
-				if (lastCircle.attributes.cx.value && lastCircle.attributes.cy.value) {
+				if (lastCircle.attributes.cx && lastCircle.attributes.cy) {
 					x = lastCircle.attributes.cx.value,
 					y = lastCircle.attributes.cy.value;
 					//ends checking interval
@@ -317,8 +317,29 @@ function happinessChangesLegend(){
 					  .append("text")
 					  .attr("x", x)
 					  .attr("y", y)
+					  .attr("country", country)
 					  .style({'font-family': 'Helvetica', 'font-size': 10, 'fill': '#484848'})
-					  .text(country);
+					  .text(country)
+					  .classed("hidden", true)
+					  .classed("changesTooltip", true);
+
+
+					d3.select(lines[i])
+					  .select("path")	
+					  .on("mouseover", d => {
+					  	d3.select(lines[i]).select("path")
+					  					   .style("cursor", "pointer")
+					  					   .attr("stroke-width", 5);
+					  	d3.select("#happinessChanges svg text[country=\""+country+"\"]")
+					  	  .classed("hidden", false);
+					  })
+					  .on("mouseout", d => {
+					  	d3.select(lines[i]).select("path")
+					  					   .style("cursor", "normal")
+					  					   .attr("stroke-width", 0);
+					  	d3.select("#happinessChanges svg text[country=\""+country+"\"]")
+					  	  .classed("hidden", true);
+					  });   
 
 					  //puts United Kingdom label a little lower so it doesn't show over "United States" label
 					  if (country == "United Kingdom"){
