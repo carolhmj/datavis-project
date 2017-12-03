@@ -36,8 +36,10 @@ function filterBins(source_group, f) {
 
 let countryFacts;
 let regionByCountry = d3.map();
+let shownCountriesHappinessChanges = ["Nigeria", "United States", "United Kingdom", "Brazil"];
 
 function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
+	console.log('build charts');
 	let countriesData = [];		
 
 	regions.forEach(d => {
@@ -87,9 +89,42 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	buildCountryResiduals();
 	buildRegionResiduals();
 	dc.renderAll();
+
+	var lines = $('#happinessChanges svg .sub');
+	console.log('lines ' + lines.length);				
+	for (var i = 0; i < lines.length; i++) {
+		console.log(lines[i].querySelector('.dc-tooltip circle title'));
+		var text = lines[i].querySelector('.dc-tooltip circle title');
+		console.log(lines[i].getBoundingClientRect());
+		var box = lines[i].getBoundingClientRect();
+		var circles = lines[i].querySelectorAll('circle');
+		// do {
+
+		// } while (typeof circles[circles.length-1].attributes.cx == "undefined");
+		var x = circles[circles.length-1].attributes.cx;
+		// do {
+
+		// } while (typeof circles[circles.length-1].attributes.cy == "undefined")
+		var y = circles[circles.length-1].attributes.cy;
+		console.log('x: ' + x + " y: " + y);
+		var newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');;
+		/*
+		* ATENÇAO!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		*/
+		//Falta so isso!!!!!!!!
+		newText.setAttribute("x", x);
+		newText.setAttribute("y", y);
+		console.log(newText);
+		// document.appendChild(newText);
+		// lines[i].appendChild(text);
+		$('#happinessChanges svg')[0].appendChild(newText);
+		// circles[circles.length-1].appendChild(text)
+	}
+	// $('#happinessChanges')[0].appendChild(document.createTextNode('teste'));
 }
 
 function buildRegionResiduals() {
+	console.log('build region residuals');
 	let regionDimension = countryFacts.dimension(d => [d.region, d.year]);
 	let residualGroup = regionDimension.group().reduce(
 		(p,v) => {
@@ -159,10 +194,17 @@ function buildCountryResiduals() {
 }
 
 function buildHappinessChange() {
+	console.log('build happiness change');
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);
 
+	happinessGroup = filterBins(happinessGroup, d => $.inArray(d.key[0], shownCountriesHappinessChanges) > -1);
+
 	let _bbox = happinessChanges.root().node().parentNode.getBoundingClientRect();
+
+	var regions = [...new Set(regionByCountry.values())].filter(d => !(typeof d == "undefined"));
+	console.log(regions);
+	var domain = d3.scale.ordinal().domain(regions).range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
 
 	happinessChanges.width(_bbox.width)
 					.height(_bbox.height)
@@ -173,7 +215,10 @@ function buildHappinessChange() {
 					.seriesAccessor(d => d.key[0])
 					.keyAccessor(d => d.key[1])
 					.dimension(countryDimension)
-					.group(happinessGroup);
+					.colors(domain)
+					.colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[0]) : null)
+					.title(d => d.key[0])
+					.group(happinessGroup);								
 
 }
 
