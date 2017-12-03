@@ -89,7 +89,7 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	buildCountryResiduals();
 	buildRegionResiduals();
 	dc.renderAll();
-	window.onload = happinessChangesLegend();
+	window.onload = happinessChangesTooltip();
 
 }
 
@@ -298,57 +298,50 @@ $(document).ready(function() {
 	resizeChart();
 });
 
-function happinessChangesLegend(){
+function happinessChangesTooltip(){
 	const lines = $('#happinessChanges svg .sub');
 
 	for (let i = 0; i < lines.length; i++) {
-		const country = lines[i].querySelector('.dc-tooltip circle title').textContent,
-			  box = lines[i].getBoundingClientRect(),
-			  lastCircle = lines[i].querySelector('circle:last-child');
+		d3.select(lines[i])
+			.select("path")
+			.on("mouseover", function (d) {
+				d3.select(this)
+				.style("cursor", "pointer")
+				$('#happinessChangesTooltip').html(d.name).show();
 
-			//set interval to check if cx and cy exist
-			const checkExist = setInterval(function() {
-				if (lastCircle.attributes.cx && lastCircle.attributes.cy) {
-					x = lastCircle.attributes.cx.value,
-					y = lastCircle.attributes.cy.value;
-					//ends checking interval
-					clearInterval(checkExist);
-					d3.select("#happinessChanges svg")
-					  .append("text")
-					  .attr("x", x)
-					  .attr("y", y)
-					  .attr("country", country)
-					  .style({'font-family': 'Helvetica', 'font-size': 10, 'fill': '#484848'})
-					  .text(country)
-					  .classed("hidden", true)
-					  .classed("changesTooltip", true);
+				var coordinates = [0, 0];
+				coordinates = d3.mouse(this);
+				console.log(coordinates);
+				const eventX = coordinates[0] + 15;
+				const eventY = coordinates[1] + 15;
+				const tooltip = document.querySelector('#happinessChangesTooltip');
+				tooltip.style.left = eventX + 'px';
+				tooltip.style.top = eventY + 'px';
+			})
+			.on("mouseout", d => {
+				$('#happinessChangesTooltip').hide()
+			});
 
+		d3.select(lines[i])
+			.selectAll("circle")
+			.on("mouseover", function (d) {
+				d3.select(this)
+					.style("cursor", "pointer")
 
-					d3.select(lines[i])
-					  .select("path")	
-					  .on("mouseover", d => {
-					  	d3.select(lines[i]).select("path")
-					  					   .style("cursor", "pointer")
-					  					   .attr("stroke-width", 5);
-					  	d3.select("#happinessChanges svg text[country=\""+country+"\"]")
-					  	  .classed("hidden", false);
-					  })
-					  .on("mouseout", d => {
-					  	d3.select(lines[i]).select("path")
-					  					   .style("cursor", "normal")
-					  					   .attr("stroke-width", 0);
-					  	d3.select("#happinessChanges svg text[country=\""+country+"\"]")
-					  	  .classed("hidden", true);
-					  });   
+				$('#happinessChangesTooltip').html(d.layer).show();
 
-					  //puts United Kingdom label a little lower so it doesn't show over "United States" label
-					  if (country == "United Kingdom"){
-						y = ((+y)+25).toString();
-						document.querySelector("#happinessChanges > svg > text:last-child")
-						.setAttribute("y",y)
-					  }
-				}
-		}, 100)
+				var coordinates = [0, 0];
+				coordinates = d3.mouse(this);
+				console.log(coordinates);
+				const eventX = coordinates[0] + 15;
+				const eventY = coordinates[1] + 15;
+				const tooltip = document.querySelector('#happinessChangesTooltip');
+				tooltip.style.left = eventX + 'px';
+				tooltip.style.top = eventY + 'px';
+			})
+			.on("mouseout", d => {
+				$('#happinessChangesTooltip').hide()
+			});
 	}
 };
 
@@ -365,6 +358,7 @@ function resizeChart() {
 										.horizontal(true)
 										.itemWidth(250)
 										.legendWidth(chartHeight));
+	buildHappinessChange();
 	dc.renderAll();
-	happinessChangesLegend();
+	happinessChangesTooltip();
 }

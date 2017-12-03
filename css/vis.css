@@ -77,3 +77,14 @@ div#regionResiduals {
 .hidden {
 	display: none;
 }
+
+#happinessChangesTooltip {
+  position: absolute;
+  background: rgba(0,0,0,.75);
+  color: white;
+  padding: .5em .75em;
+  font-size: 1em;
+  display: none;
+  z-index: 450;
+	opacity: 0.8;
+}
