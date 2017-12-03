@@ -197,18 +197,19 @@ function buildHappinessChange() {
 						  box = lines[i].getBoundingClientRect(),
 						  lastCircle = lines[i].querySelector('circle:last-child'),
 						  x = lastCircle.attributes.cx.value,
-						  y = lastCircle.attributes.cy.value,
-						  newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+						  y = lastCircle.attributes.cy.value;
 
 						//set interval to check if cx and cy exist
 						const checkExist = setInterval(function() {
 							if (x && y) {
 								//ends checking interval
 								clearInterval(checkExist);
-								newText.setAttribute("x", x);
-								newText.setAttribute("y", y);
-								newText.setAttribute("country", country);
-								$('#happinessChanges svg')[0].appendChild(newText);
+								d3.select("#happinessChanges svg")
+								  .append("text")
+								  .attr("x", x)
+								  .attr("y", y)
+								  .style({'font-family': 'Helvetica', 'font-size': 10, 'fill': '#484848'})
+								  .text(country);
 						}
 					}, 100)
 				}
