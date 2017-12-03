@@ -1,0 +1,75 @@
+/* CSS file for styling the visualizations */
+
+div#happinessFactorsContainer {
+	width: 100%;
+	height: 330px;
+}
+
+div#happinessFactorsLegend {
+	width: 100%;
+	display: flex;
+}
+
+.legend-item {
+	margin: 15px;
+}
+
+div#happinessFactors {
+	width: 200px;
+	margin-top: 110px;
+	position: absolute;
+	transform-origin: top;
+	transform: rotate(-270deg);
+}
+
+#happinessFactors svg .y .tick text {
+	transform: translate(-10px, -16px) rotate(270deg);
+}
+
+#happinessFactors svg .x .tick text {
+	transform: translate(-14px, 23px) rotate(270deg);
+}
+
+.dc-legend-item {
+	text-decoration: underline;
+}
+
+.dc-legend-item:hover {
+	text-decoration: none;
+}
+
+div#happinessAndSuicideContainer {
+	width: 80vh;
+	height: 80vh;
+}
+
+div#happinessAndSuicide {
+	position: absolute;
+}
+
+div#happinessChangesContainer {
+	width: 60vw;
+	height: 80vh;
+}
+
+div#happinessChanges {
+	position: absolute;
+}
+
+div#countryResidualsContainer {
+	width: 80vw;
+	height: 70vh;
+}
+
+div#countryResiduals {
+	position: absolute;
+}
+
+div#regionResidualsContainer {
+	width: 85vw;
+	height: 70vh;
+}
+
+div#regionResiduals {
+	position: absolute;
+}

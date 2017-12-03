@@ -1,0 +1,67 @@
+/* CSS file for styling the main website */
+
+@font-face {
+    font-family: avenirNext;
+    src: url(avenir-next-regular.woff);
+}
+
+html, body {
+    font-family: avenirNext;
+}
+
+.navbar {
+    background-color: #0e8373;
+}
+
+#main {
+    min-height:100%;
+    padding-top:70px;
+    text-align:left;
+    transition: ease 1s;
+}
+
+.section {
+    margin-bottom:50px;
+}
+
+h2 {
+    text-align:center;
+    color: #0e8373;
+    transition: ease 1s;
+}
+
+a {
+    transition: ease .5s;
+}
+
+.footer {
+    text-align: left;
+    background-color: #fafafa;
+    border-top: 1px #f1f1f1 solid;
+    transition: ease 1s;
+    color: rgb(145, 145, 145);
+}
+
+.footer h5 {
+    margin: 0;
+    margin-top:5px;
+}
+
+.footer h6 {
+    font-weight: normal;
+    margin: 5px 0px 15px 0px;
+}
+
+.footer p {
+    margin: 6px 0px;
+    font-size:14px;
+}
+
+.footer a {
+    color: rgb(145, 145, 145);
+    text-decoration: none;
+}
+
+#footer a:hover {
+    color: rgb(145, 145, 145);
+}
