@@ -187,8 +187,8 @@ function buildHappinessChange() {
 					.dimension(countryDimension)
 					.colors(domain)
 					.colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[0]) : null)
-					.title(d => d.key[0])
-					.group(happinessGroup);
+					.group(happinessGroup)
+					.renderTitle(false);
 }
 
 function buildHappinessFactors(happiness) {
@@ -328,7 +328,8 @@ function happinessChangesTooltip(){
 				d3.select(this)
 					.style("cursor", "pointer")
 
-				$('#happinessChangesTooltip').html(d.layer).show();
+				const info = `${d.layer} <br> ${d.x}: ${d.y.toFixed(2)}`
+				$('#happinessChangesTooltip').html(info).show();
 
 				var coordinates = [0, 0];
 				coordinates = d3.mouse(this);
