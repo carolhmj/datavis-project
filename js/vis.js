@@ -188,23 +188,31 @@ function buildHappinessChange() {
 					.title(d => d.key[0])
 					.group(happinessGroup);
 
-	//when DOM is ready, calculate lines info
-	$( document ).ready( function(){
+	// when DOM is ready, calculate lines info
+	$( window ).on('load', function(){
 		const lines = $('#happinessChanges svg .sub');
 
 		for (let i = 0; i < lines.length; i++) {
 			const country = lines[i].querySelector('.dc-tooltip circle title').textContent,
 				  box = lines[i].getBoundingClientRect(),
 				  lastCircle = lines[i].querySelector('circle:last-child'),
-				  x = lastCircle.attributes.cx.value,
-				  y = lastCircle.attributes.cy.value,
-				  newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');;
+				  x = lastCircle.attributes.cx.value;
+				  // x = 1;
+				  // y = 1;
+				  y = lastCircle.attributes.cy.value;
+				  newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
 
 			newText.setAttribute("x", x);
 			newText.setAttribute("y", y);
-			newText.setAttribute("country", country);
+			// newText.text(country);
 
-			$('#happinessChanges svg')[0].appendChild(newText);
+			// $('#happinessChanges svg')[0].appendChild(newText);
+			d3.select("#happinessChanges svg")
+			  .append("text")
+			  .attr("x", x)
+			  .attr("y", y)
+			  .style({'font-family': 'Helvetica', 'font-size': 6, 'fill': '#484848'})
+			  .text(country);
 		}
 	});
 
