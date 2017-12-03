@@ -262,11 +262,24 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 	var domain = d3.scale.ordinal()
 						 .domain(regions)
 						 .range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
-						 
+
+	//set x and y chart values, they need to be a little bigger so data can fit correctly on chart
+	const xValue = d3.extent(happinessAndSuicideGroup.all().map(d => d.key[0])),
+		  yValue = d3.extent(happinessAndSuicideGroup.all().map(d => d.key[1]));
+	xValue[0] -= 0.5;
+	xValue[1] += 0.5;
+	yValue[0] -= 0.5;
+	yValue[1] += 0.5;
+
+	dc.override(happinessAndSuicide, 'legendables', function() {
+		var items = happinessAndSuicide._legendables();
+		return items.reverse();
+	});
+
 	happinessAndSuicide.width(chartWidth)
 					   .height(chartHeight)
-					   .x(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[0]))))
-					   .y(d3.scale.linear().domain(d3.extent(happinessAndSuicideGroup.all().map(d => d.key[1]))))
+					   .x(d3.scale.linear().domain(xValue))
+					   .y(d3.scale.linear().domain(yValue))
 					   .dimension(happinessAndSuicideDimension)
 					   .group(happinessAndSuicideGroup)
 					   .brushOn(false)
@@ -275,7 +288,10 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 					   .colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[2]) : null)
 					   .title(function(d) {
 					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
-					   });				   		
+					   })
+					   .symbolSize(15)
+					   .legend(dc.legend());
+
 }	
 	
 $(window).on("resize", function() {
