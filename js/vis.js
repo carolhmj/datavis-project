@@ -188,26 +188,31 @@ function buildHappinessChange() {
 					.title(d => d.key[0])
 					.group(happinessGroup);
 
-	//when DOM is ready, calculate lines info
-	$( document ).ready( function(){
-		const lines = $('#happinessChanges svg .sub');
+			//when DOM is ready, calculate lines info
+			window.onload = function(){
+				const lines = $('#happinessChanges svg .sub');
 
-		for (let i = 0; i < lines.length; i++) {
-			const country = lines[i].querySelector('.dc-tooltip circle title').textContent,
-				  box = lines[i].getBoundingClientRect(),
-				  lastCircle = lines[i].querySelector('circle:last-child'),
-				  x = lastCircle.attributes.cx.value,
-				  y = lastCircle.attributes.cy.value,
-				  newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');;
+				for (let i = 0; i < lines.length; i++) {
+					const country = lines[i].querySelector('.dc-tooltip circle title').textContent,
+						  box = lines[i].getBoundingClientRect(),
+						  lastCircle = lines[i].querySelector('circle:last-child'),
+						  x = lastCircle.attributes.cx.value,
+						  y = lastCircle.attributes.cy.value,
+						  newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
 
-			newText.setAttribute("x", x);
-			newText.setAttribute("y", y);
-			newText.setAttribute("country", country);
-
-			$('#happinessChanges svg')[0].appendChild(newText);
-		}
-	});
-
+						//set interval to check if cx and cy exist
+						const checkExist = setInterval(function() {
+							if (x && y) {
+								//ends checking interval
+								clearInterval(checkExist);
+								newText.setAttribute("x", x);
+								newText.setAttribute("y", y);
+								newText.setAttribute("country", country);
+								$('#happinessChanges svg')[0].appendChild(newText);
+						}
+					}, 100)
+				}
+			};
 }
 
 function buildHappinessFactors(happiness) {
