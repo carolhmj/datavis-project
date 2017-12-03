@@ -89,38 +89,6 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	buildCountryResiduals();
 	buildRegionResiduals();
 	dc.renderAll();
-
-	var lines = $('#happinessChanges svg .sub');
-	console.log('lines ' + lines.length);				
-	for (var i = 0; i < lines.length; i++) {
-		console.log(lines[i].querySelector('.dc-tooltip circle title'));
-		var text = lines[i].querySelector('.dc-tooltip circle title');
-		console.log(lines[i].getBoundingClientRect());
-		var box = lines[i].getBoundingClientRect();
-		var circles = lines[i].querySelectorAll('circle');
-		// do {
-
-		// } while (typeof circles[circles.length-1].attributes.cx == "undefined");
-		var x = circles[circles.length-1].attributes.cx;
-		// do {
-
-		// } while (typeof circles[circles.length-1].attributes.cy == "undefined")
-		var y = circles[circles.length-1].attributes.cy;
-		console.log('x: ' + x + " y: " + y);
-		var newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');;
-		/*
-		* ATENÇAO!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		*/
-		//Falta so isso!!!!!!!!
-		newText.setAttribute("x", x);
-		newText.setAttribute("y", y);
-		console.log(newText);
-		// document.appendChild(newText);
-		// lines[i].appendChild(text);
-		$('#happinessChanges svg')[0].appendChild(newText);
-		// circles[circles.length-1].appendChild(text)
-	}
-	// $('#happinessChanges')[0].appendChild(document.createTextNode('teste'));
 }
 
 function buildRegionResiduals() {
@@ -218,7 +186,27 @@ function buildHappinessChange() {
 					.colors(domain)
 					.colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[0]) : null)
 					.title(d => d.key[0])
-					.group(happinessGroup);								
+					.group(happinessGroup);
+
+	//when DOM is ready, calculate lines info
+	$( document ).ready( function(){
+		const lines = $('#happinessChanges svg .sub');
+
+		for (let i = 0; i < lines.length; i++) {
+			const country = lines[i].querySelector('.dc-tooltip circle title').textContent,
+				  box = lines[i].getBoundingClientRect(),
+				  lastCircle = lines[i].querySelector('circle:last-child'),
+				  x = lastCircle.attributes.cx.value,
+				  y = lastCircle.attributes.cy.value,
+				  newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');;
+
+			newText.setAttribute("x", x);
+			newText.setAttribute("y", y);
+			newText.setAttribute("country", country);
+
+			$('#happinessChanges svg')[0].appendChild(newText);
+		}
+	});
 
 }
 
