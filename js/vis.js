@@ -266,6 +266,7 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 	yValue[0] -= 0.5;
 	yValue[1] += 0.5;
 
+<<<<<<< HEAD
 	var subChart = function(c) {
 		return dc.scatterPlot(c)
         .symbolSize(8)
@@ -291,6 +292,22 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 
 	$("#happinessAndSuicideContainer .dc-legend").css("height","100px");
 
+=======
+	happinessAndSuicide.width(chartWidth)
+					   .height(chartHeight)
+					   .x(d3.scale.linear().domain(xValue))
+					   .y(d3.scale.linear().domain(yValue))
+					   .dimension(happinessAndSuicideDimension)
+					   .group(happinessAndSuicideGroup)
+					   .brushOn(false)
+					   .renderTitle(true)
+					   .colors(domain)
+					   .colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[2]) : null)
+					   .title(function(d) {
+					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
+					   })
+					   .symbolSize(15);
+>>>>>>> 259b19d670b043b319551df57b80e8d4f2f7d56b
 }	
 	
 $(window).on("resize", function() {
