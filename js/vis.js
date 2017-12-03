@@ -266,7 +266,6 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 	yValue[0] -= 0.5;
 	yValue[1] += 0.5;
 
-<<<<<<< HEAD
 	var subChart = function(c) {
 		return dc.scatterPlot(c)
         .symbolSize(8)
@@ -290,24 +289,6 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 			return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
 	});
 
-	$("#happinessAndSuicideContainer .dc-legend").css("height","100px");
-
-=======
-	happinessAndSuicide.width(chartWidth)
-					   .height(chartHeight)
-					   .x(d3.scale.linear().domain(xValue))
-					   .y(d3.scale.linear().domain(yValue))
-					   .dimension(happinessAndSuicideDimension)
-					   .group(happinessAndSuicideGroup)
-					   .brushOn(false)
-					   .renderTitle(true)
-					   .colors(domain)
-					   .colorAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[2]) : null)
-					   .title(function(d) {
-					   	return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
-					   })
-					   .symbolSize(15);
->>>>>>> 259b19d670b043b319551df57b80e8d4f2f7d56b
 }	
 	
 $(window).on("resize", function() {
@@ -320,19 +301,19 @@ function resizeCharts() {
 	var chartHeight = _bbox.width;
 	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
 	happinessFactors.width(chartWidth)
-					.height(chartHeight)
-					.legend(dc.legend().x($("#happinessFactors").width())
-										.y(chartHeight)
-										.rotation(270)
-										.horizontal(true)
-										.itemWidth(250)
-										.legendWidth(chartHeight));
+		.height(chartHeight)
+		.legend(dc.legend().x($("#happinessFactors").width())
+			.y(chartHeight)
+			.rotation(270)
+			.horizontal(true)
+			.itemWidth(250)
+			.legendWidth(chartHeight));
 
 	rect = _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
 	chartWidth = _bbox.width;
 	chartHeight = _bbox.height;
 	happinessAndSuicide.width(chartWidth)
-	.height(chartHeight)
-	.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
+		.height(chartHeight)
+		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
 	dc.renderAll();
 }
