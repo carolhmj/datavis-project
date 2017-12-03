@@ -85,7 +85,6 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	buildHappinessAndSuicide();
 	buildCountryResiduals();
 	buildRegionResiduals();
-	dc.renderAll();
 
 	resizeCharts();
 }
