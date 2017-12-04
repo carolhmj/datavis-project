@@ -203,9 +203,9 @@ function buildHappinessFactors() {
 		return {};
 	});
 
-	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value[ladderScore] - c1.value[ladderScore]}).map(x => x.key[0]);
+	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d => d.key[1] == 2015 && !(isNaN(d.value[ladderScore]))).sort((c1, c2) => {return c2.value[ladderScore] - c1.value[ladderScore]}).map(x => x.key[0]);
 
-	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-6,-5))).concat(countriesWithHappinessScores.slice(-4));
+	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5)));
 
 	var filteredGroup = filterBins(factorsGroup, function(d) {
 		return d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
@@ -223,16 +223,19 @@ function buildHappinessFactors() {
 	var chartHeight = _bbox.width;
 
 	happinessFactors.width(chartWidth)
-		 .height(chartHeight)
-		 .gap(10)
-		 .x(d3.scale.ordinal().domain(topBottomCountries))
-		 .xUnits(dc.units.ordinal)
-		 .margins({left: 30, top: 80, right: 170, bottom: 75})
-		 .brushOn(false)
-		 .elasticY(true)
-		 .dimension(countryDimension)
-		 .keyAccessor(d => d.key[0])
-		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia));
+		.height(chartHeight)
+		.gap(10)
+		.x(d3.scale.ordinal().domain(topBottomCountries))
+		.xUnits(dc.units.ordinal)
+		.margins({left: 30, top: 80, right: 170, bottom: 75})
+		.brushOn(false)
+		.elasticY(true)
+		.dimension(countryDimension)
+		.keyAccessor(d => d.key[0])
+		.group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia))
+		.title(function(d) {
+			return this.layer + '\n' + d.value[this.layer];
+		});
 
 	 
 	happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
@@ -243,7 +246,7 @@ function buildHappinessFactors() {
 	happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
 }
 
-function buildHappinessAndSuicide(happiness, suicideRate) {
+function buildHappinessAndSuicide() {
 	
 	let happinessAndSuicideDimension = countryFacts.dimension(d => [d.happiness, d.suicide, d.country, d.year]);
 	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[3] == 2015 && !isNaN(d.key[1]));
