@@ -73,3 +73,9 @@ div#regionResidualsContainer {
 div#regionResiduals {
 	position: absolute;
 }
+
+.clickable-text {
+	color: #0E8373;
+	font-style: italic;
+	cursor: pointer;
+}

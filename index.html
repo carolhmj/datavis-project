@@ -57,7 +57,10 @@
         <div id="main">
             <div id="top" class="section">
                 <h1>Uma exploração da felicidade</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
+                <p>Olá você tentemos fazer uma coisa <span class=clickable-text onclick="alert('coisa legal')">legal</span><br/>
+                Agora olhemos para o <span class=clickable-text onclick="setMapTo('Brazil')">Brasil</span><br/>
+                Legal né? <br/>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
 
                 <div class="slider-container">
                     <div>
@@ -116,6 +119,7 @@
         </div>
     </div>
     <script>
+        const map = L.map('worldmap',{maxZoom:10,minZoom:1.25});
         WorldMap();
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>

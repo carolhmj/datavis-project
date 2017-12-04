@@ -1,6 +1,5 @@
 function WorldMap(){
-    const map = L.map('worldmap',{maxZoom:10,minZoom:1.25}),
-    topoLayer = new L.TopoJSON(),
+    const topoLayer = new L.TopoJSON(),
     $tooltip = $('.map-tooltip'),
     colorScale = d3.scale.quantile()
                 .range(['#edf8fb', '#ccece6', '#99d8c9', '#66c2a4', '#2ca25f', '#0e8373'])
@@ -135,4 +134,10 @@ function WorldMap(){
     $('.range-labels span').on('click',function() {
         $('#year-slider').val(($(this).index()) + 1).trigger('input');
     });
+}
+
+function setMapTo(country){
+    if (country == "Brazil"){
+        map.setView([-15.73,-51.92], 4);
+    }
 }
