@@ -2,16 +2,8 @@
 
 div#happinessFactorsContainer {
 	width: 100%;
-	height: 330px;
-}
-
-div#happinessFactorsLegend {
-	width: 100%;
-	display: flex;
-}
-
-.legend-item {
-	margin: 15px;
+	height: 450px;
+	margin-bottom: -80px;
 }
 
 div#happinessFactors {
@@ -27,15 +19,12 @@ div#happinessFactors {
 }
 
 #happinessFactors svg .x .tick text {
-	transform: translate(-14px, 23px) rotate(270deg);
-}
-
-.dc-legend-item {
-	text-decoration: underline;
+	text-anchor: end !important;
+	transform: translate(-14px, 12px) rotate(270deg);
 }
 
 .dc-legend-item:hover {
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 div#happinessAndSuicideContainer {

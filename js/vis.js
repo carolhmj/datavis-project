@@ -224,10 +224,10 @@ function buildHappinessFactors(happiness) {
 
 	happinessFactors.width(chartWidth)
 		 .height(chartHeight)
-		 .gap(20)
+		 .gap(10)
 		 .x(d3.scale.ordinal().domain(topBottomCountries))
 		 .xUnits(dc.units.ordinal)
-		 .margins({left: 40, top: 80, right: 170, bottom: 40})
+		 .margins({left: 30, top: 80, right: 170, bottom: 75})
 		 .brushOn(false)
 		 .elasticY(true)
 		 .dimension(countryDimension)
@@ -290,19 +290,30 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 
 }	
 	
+var rtime;
+var timeout = false;
+var delta = 200;
 $(window).on("resize", function() {
-	resizeCharts();
+	rtime = new Date();
+    if (timeout === false) {
+        timeout = true;
+        setTimeout(resizeCharts, delta);
+    }
 });
 
 function resizeCharts() {
+	if (new Date() - rtime < delta) {
+    	setTimeout(resizeCharts, delta);
+    } else {
+		timeout = false;
 	var rect = _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.height;
 	var chartHeight = _bbox.width;
 	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
 	happinessFactors.width(chartWidth)
 		.height(chartHeight)
-		.legend(dc.legend().x($("#happinessFactors").width())
-			.y(chartHeight)
+			.legend(dc.legend().x(310)
+				.y(chartHeight - 40)
 			.rotation(270)
 			.horizontal(true)
 			.itemWidth(250)
@@ -315,4 +326,16 @@ function resizeCharts() {
 		.height(chartHeight)
 		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
 	dc.renderAll();
+}			.horizontal(true)
+				.itemWidth(250)
+				.legendWidth(chartHeight));
+	
+		rect = _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
+		chartWidth = _bbox.width;
+		chartHeight = _bbox.height;
+		happinessAndSuicide.width(chartWidth)
+			.height(chartHeight)
+			.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
+		dc.renderAll();
+    }
 }
