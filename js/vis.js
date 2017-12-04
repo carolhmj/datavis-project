@@ -68,7 +68,7 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	});
 
 	countriesData.filter(d => d.year == 2015).forEach(d => {
-		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + 'is NaN residualPlusDystopia');}
+		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + ' is NaN residualPlusDystopia');}
 	});
 
 	countryFacts = crossfilter(countriesData);
@@ -177,7 +177,7 @@ function buildHappinessChange() {
 
 }
 
-function buildHappinessFactors(happiness) {
+function buildHappinessFactors() {
 	var countryDimension = countryFacts.dimension(d => [d.country, d.year, d.happiness]);
 	var factorsGroup = countryDimension.group().reduce(function (p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) + v[explLogGDP];
@@ -205,7 +205,7 @@ function buildHappinessFactors(happiness) {
 
 	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value[ladderScore] - c1.value[ladderScore]}).map(x => x.key[0]);
 
-	let topBottomCountries = countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5));
+	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-6,-4))).concat(countriesWithHappinessScores.slice(-4));
 
 	var filteredGroup = filterBins(factorsGroup, function(d) {
 		return d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
@@ -288,8 +288,8 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 			return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
 	});
 
-}	
-	
+}
+
 var rtime;
 var timeout = false;
 var delta = 200;
@@ -306,27 +306,16 @@ function resizeCharts() {
     	setTimeout(resizeCharts, delta);
     } else {
 		timeout = false;
-	var rect = _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
-	var chartWidth = _bbox.height;
-	var chartHeight = _bbox.width;
-	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
-	happinessFactors.width(chartWidth)
-		.height(chartHeight)
+		var rect = _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
+		var chartWidth = _bbox.height;
+		var chartHeight = _bbox.width;
+		$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
+		happinessFactors.width(chartWidth)
+			.height(chartHeight)
 			.legend(dc.legend().x(310)
 				.y(chartHeight - 40)
-			.rotation(270)
-			.horizontal(true)
-			.itemWidth(250)
-			.legendWidth(chartHeight));
-
-	rect = _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
-	chartWidth = _bbox.width;
-	chartHeight = _bbox.height;
-	happinessAndSuicide.width(chartWidth)
-		.height(chartHeight)
-		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
-	dc.renderAll();
-}			.horizontal(true)
+				.rotation(270)
+				.horizontal(true)
 				.itemWidth(250)
 				.legendWidth(chartHeight));
 	
