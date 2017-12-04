@@ -40,7 +40,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                    <a class="nav-link" href="#top">Início <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#introduction">Introdução<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link" href="#1">Seção 1</a>
@@ -55,10 +55,14 @@
     </nav>
     <div class="container">
         <div id="main">
-            <div id="top" class="section">
+            <div id="introduction" class="section">
                 <h1>Uma exploração da felicidade</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
-
+                <p>Você já parou para pensar em como está a sua vida hoje? Você se considera feliz com ela? O que você acredita que torna sua vida mais feliz ou infeliz? Essas perguntas, que antes eram exclusivas de nossas reflexões pessoais, hoje são vistas pelos cientistas como chaves para analisar o bem-estar das populações do mundo, e promover um novo tipo de crescimento, que busque acima de tudo, a felicidade de todos.</p>
+				<p>Com esse fim, a ONU elabora anualmente o World Happiness Report, uma coleção de dados e estudos sobre a felicidade, procurando entender seus fatores contribuintes em vários países e situações. Uma das principais fontes de dados do World Happiness Report é o Gallup World Poll, que realiza pesquisas presenciais e por telefone em todo o mundo. A pergunta que mede os níveis de felicidade em todo o mundo é a seguinte:</p>
+				<blockquote class="blockquote">
+  					<p>Por favor, imagine uma escada, com degraus numerados de 0, na parte inferior, a 10, na parte superior. A parte superior representa a melhor vida possível para você, e a parte inferior representa a pior vida possível para você. Em que degrau da escada você diria que está nesse momento?</p>
+				</blockquote>
+				<p> O mapa a seguir representa a média das respostas da população nos três World Happiness Reports mais recentes.</p>
                 <div class="slider-container">
                     <div>
                       <input id="year-slider" type="range" min="1" max="3" steps="1" value="3" >
@@ -71,11 +75,16 @@
                 </div>
                 <div id="worldmap">
                     <div class="map-tooltip"></div>
-                </div>
-                
+                </div>        
             </div>
-            <div id="1" class="section">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
+            <div id="factors" class="section">
+                <p>O World Happiness Report considera seis variáveis chaves para explicar a felicidade em um país:</p>
+				<dl class="row">
+					<dt class="col-sm-3">GDP per capita</dt>
+					<dd class="col-sm-9">Ajustado em termos de paridade de compra, e utilizado em forma de log, pois ajusta-se melhor aos dados</dd>
+					<dt class="col-sm-3">Expectativa de vida saudável</dt>
+					<dd class="col-sm-9">Baseado em dados da World Health Organization</dd>
+				</dl>
                 <div id="happinessFactorsContainer">
                     <div id="happinessFactors"></div>
                 </div>
