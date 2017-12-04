@@ -205,7 +205,7 @@ function buildHappinessFactors() {
 
 	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value[ladderScore] - c1.value[ladderScore]}).map(x => x.key[0]);
 
-	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-6,-4))).concat(countriesWithHappinessScores.slice(-4));
+	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-6,-5))).concat(countriesWithHappinessScores.slice(-4));
 
 	var filteredGroup = filterBins(factorsGroup, function(d) {
 		return d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
