@@ -36,8 +36,10 @@ function filterBins(source_group, f) {
 
 let countryFacts;
 let regionByCountry = d3.map();
+let shownCountriesHappinessChanges = ["Nigeria", "United States", "United Kingdom", "Brazil"];
 
 function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
+	console.log('build charts');
 	let countriesData = [];		
 
 	regions.forEach(d => {
@@ -85,11 +87,11 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	buildHappinessAndSuicide();
 	buildCountryResiduals();
 	buildRegionResiduals();
-
 	resizeCharts();
 }
 
 function buildRegionResiduals() {
+	console.log('build region residuals');
 	let regionDimension = countryFacts.dimension(d => [d.region, d.year]);
 	let residualGroup = regionDimension.group().reduce(
 		(p,v) => {
@@ -159,10 +161,17 @@ function buildCountryResiduals() {
 }
 
 function buildHappinessChange() {
+	console.log('build happiness change');
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);
 
+	happinessGroup = filterBins(happinessGroup, d => $.inArray(d.key[0], shownCountriesHappinessChanges) > -1);
+
+	console.log(happinessGroup.all());
+
 	let _bbox = happinessChanges.root().node().parentNode.getBoundingClientRect();
+
+	var domain = d3.scale.ordinal().domain(shownCountriesHappinessChanges).range(['#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f']);
 
 	happinessChanges.width(_bbox.width)
 					.height(_bbox.height)
@@ -173,8 +182,10 @@ function buildHappinessChange() {
 					.seriesAccessor(d => d.key[0])
 					.keyAccessor(d => d.key[1])
 					.dimension(countryDimension)
-					.group(happinessGroup);
-
+					.colors(domain)
+					.group(happinessGroup)
+					.renderTitle(false)
+					.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(_bbox.width-100).y(_bbox.height-100).legendWidth(140).itemWidth(150));
 }
 
 function buildHappinessFactors(happiness) {
@@ -314,5 +325,8 @@ function resizeCharts() {
 	happinessAndSuicide.width(chartWidth)
 		.height(chartHeight)
 		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
+	happinessChanges.width(_bbox.width)
+					.height(_bbox.height)
+					.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(_bbox.width-100).y(_bbox.height-100).legendWidth(140).itemWidth(150));	
 	dc.renderAll();
 }
