@@ -137,7 +137,14 @@ function WorldMap(){
 }
 
 function setMapTo(country){
-    if (country == "Brazil"){
-        map.setView([-15.73,-51.92], 4);
+    switch(country) {
+        case "Brazil":
+            map.setView([-15.73,-51.92], 4);
+            break;
+        case "Israel":
+            map.setView([31.35,36.04], 7);
+            break;
+        default:
+            map.setView([20,0], 2);
     }
 }

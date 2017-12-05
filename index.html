@@ -72,13 +72,14 @@
                       <span class="active">2017</span>
                     </ul>
                 </div>
+                <span class=clickable-text onclick="setMapTo('reset')">reset map position</span>
                 <div id="worldmap">
                     <div class="map-tooltip"></div>
                 </div>
-                
             </div>
-            <div id="1" class="section">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
+            <div id="1" class="section ">
+                <p class='map-text'>Ao passar o mouse por cima de um país é possível observar o índice de felicidade dele e logo acima do mapa há um slider para alternar os dados entre os anos disponíveis. 
+                O primeiro fato interessante a se observar é a distribuição de cores por continente, independente do ano é visível que as cores da África e da Ásia são em geral bem mais claras que as dos outros continentes, na África de fato não se vê nenhum país com índice acima de 6, na Ásia há 8 países com índice acima 6, mas apenas um deles tem índice acima de 7, <span class=clickable-text onclick="setMapTo('Israel')">Israel</span>. </p>
                 <div id="happinessFactorsContainer">
                     <div id="happinessFactors"></div>
                 </div>

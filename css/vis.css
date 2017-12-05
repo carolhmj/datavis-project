@@ -79,3 +79,8 @@ div#regionResiduals {
 	font-style: italic;
 	cursor: pointer;
 }
+
+.map-text {
+	max-height: 200px;
+	overflow-y: auto;
+}
