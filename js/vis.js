@@ -165,7 +165,10 @@ function buildRegionResiduals() {
 				   .keyAccessor(d => d.key[0])
 				   .valueAccessor(d => d.value.sum / d.value.count)
 				   .renderHorizontalGridLines(true)
+				   .brushOn(false)
 				   .colors(["#0e8373"]);
+
+	regionResiduals.filter = function() {};			   
 }
 
 function buildCountryResiduals() {
@@ -196,9 +199,10 @@ function buildCountryResiduals() {
 					.renderHorizontalGridLines(true)
 					.colors(["#0e8373", "#DAF7A6"])
 					.colorDomain([1,2])
+					.brushOn(false)
 					.colorAccessor(d => colorScale($.inArray(d.key[0], topBottomCountries)));
 
-
+	countryResiduals.filter = function() {};					
 }
 
 function buildHappinessChange() {
@@ -227,7 +231,9 @@ function buildHappinessChange() {
 					.colors(domain)
 					.group(happinessGroup)
 					.renderTitle(false)
+					.brushOn(false)
 					.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(_bbox.width-100).y(_bbox.height-150).legendWidth(140).itemWidth(150));
+	happinessChanges.filter = function() {};					
 }
 
 function buildHappinessFactors() {
@@ -311,6 +317,8 @@ function buildHappinessFactors() {
 		happinessFactors.stack(filteredGroup, explSocialSupport, sel_stack(explSocialSupport));
 		happinessFactors.stack(filteredGroup, explCorruption, sel_stack(explCorruption));
 		happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
+
+	happinessFactors.filter = function() {};		
 }
 
 function buildHappinessAndSuicide() {
@@ -360,6 +368,8 @@ function buildHappinessAndSuicide() {
 			return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
 		})
 		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
+
+	happinessAndSuicide.filter = function() {};		
 
 }
 
