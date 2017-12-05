@@ -139,10 +139,20 @@ function WorldMap(){
 function setMapTo(country){
     switch(country) {
         case "Brazil":
-            map.setView([-15.73,-51.92], 4);
+            map.flyTo([-15.73,-51.92], 4);
             break;
         case "Israel":
-            map.setView([31.35,36.04], 7);
+            map.flyTo([31.35,36.04], 7);
+            //L.latlng(31.35,36.04)
+            break;
+        case "West Bank":
+            map.flyTo([31.90,35.04], 8.5);
+            break;
+        case "Africa":
+            map.flyTo([5.0,22.50], 3);
+            break;
+        case "Asia":
+            map.flyTo([35.04,130],3);
             break;
         default:
             map.setView([20,0], 2);
