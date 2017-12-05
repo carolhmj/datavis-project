@@ -36,6 +36,7 @@ function filterBins(source_group, f) {
 
 let countryFacts;
 let regionByCountry = d3.map();
+let dystopiaByYear = {'2015': 2.10, '2016': 2.33, '2017': 1.85}
 
 function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	let countriesData = [];		
@@ -122,6 +123,7 @@ function buildRegionResiduals() {
 				   .x(d3.scale.ordinal().domain(allRegions))
 				   .xUnits(dc.units.ordinal)
 				   .elasticY(true)
+				   .yAxisLabel("Dystopia (" + dystopiaByYear["2015"] + ") + Residual")
 				   .dimension(regionDimension)
 				   .group(residualGroup)
 				   .keyAccessor(d => d.key[0])
@@ -147,6 +149,7 @@ function buildCountryResiduals() {
 					.xUnits(dc.units.ordinal)
 					.x(d3.scale.ordinal().domain(topBottomCountries))
 					.elasticY(true)
+					.yAxisLabel("Dystopia (" + dystopiaByYear["2015"] + ") + Residual")
 					.dimension(countryDimension)
 					.group(residualGroup)
 					.keyAccessor(d => d.key[0])
@@ -168,6 +171,7 @@ function buildHappinessChange() {
 					.height(_bbox.height)
 					.xUnits(d3.time.years)
 					.x(d3.scale.linear().domain([2006,2016]))
+					.yAxisLabel("Happiness score")
 					.renderHorizontalGridLines(true)
 					.brushOn(false)
 					.seriesAccessor(d => d.key[0])
@@ -275,7 +279,9 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 		.height(chartHeight)
 		.chart(subChart)
 		.x(d3.scale.linear().domain(xValue))
+		.xAxisLabel("Happiness score")
 		.y(d3.scale.linear().domain(yValue))
+		.yAxisLabel("Suicide mortality rate (per 100,000 population)")
 		.margins({left: 40, top: 40, right: 300, bottom: 40})
 		.dimension(happinessAndSuicideDimension)
 		.group(happinessAndSuicideGroup)
@@ -286,7 +292,7 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 		.valueAccessor(d => !(typeof d == "undefined") ? d.key[1] : null)
 		.title(function(d) {
 			return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
-	});
+		});
 
 }	
 	
