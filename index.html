@@ -40,17 +40,21 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                    <a class="nav-link" href="#introduction">Introdução<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#introduction">Introdução<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#factors">Fatores</a>
+                        <a class="nav-link" href="#factors">Fatores</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#changes">Mudanças</a>
+                        <a class="nav-link" href="#changes">Mudanças</a>
 					</li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#suicide">Suicidio</a>
+                        <a class="nav-link" href="#suicide">Suicidio</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link reset" href>Limpar filtros</a>
                     </li>
                 </ul>
             </div>
@@ -66,20 +70,21 @@
 				<p> O mapa a seguir representa a média das respostas da população nos três World Happiness Reports mais recentes.</p>
                 <div class="slider-container">
                     <div>
-                      <input id="year-slider" type="range" min="1" max="3" steps="1" value="3" >
+                      <input id="year-slider" class="year-slider" type="range" min="1" max="3" steps="1" value="3" >
                     </div>
                     <ul class="range-labels">
+                      <span>2014</span>
                       <span>2015</span>
-                      <span>2016</span>
-                      <span class="active">2017</span>
+                      <span class="active">2016</span>
                     </ul>
                 </div>
                 <figure>                
                     <div id="worldmap">
                         <div class="map-tooltip"></div>
                     </div> 
-                <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs (múltiplos anos). World Happiness Report, New York: Sustainable Development Solutions Network.</figcaption>
+                    <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs (múltiplos anos). World Happiness Report, New York: Sustainable Development Solutions Network.</figcaption>
                 </figure>       
+                
             </div>
 
             <div id="factors" class="section">
@@ -101,6 +106,16 @@
 				<p>Em cada WHR, é realizada uma análise de regressão nos dados, obtendo coeficientes que explicam o relacionamento entre a felicidade de um país e as variáveis.</p>
 				<p>No entanto, a felicidade é um sentimento complexo demais para ser previsto apenas por essa quantidade de dados. Existem outros fatores, especialmente sociais e culturais, que podem afetar os níveis de felicidade de um país. A diferença entre o valor de felicidade previsto para um país pelo modelo, e o valor de fato é chamado de residual. Esse residual pode ser tanto positivo como negativo.</p>
 				<p>O seguinte gráfico de barras mostra a contribuição de cada fator nos escores de felicidade dos 5 melhores e piores países do ranking. Para entendê-lo melhor, precisamos falar sobre a terrível Dystopia! Dystopia é um país fictício com os piores indicadores do mundo entre os seis fatores da felicidade. A felicidade de Dystopia, calculada pelo modelo, é considerada a base de comparação com todos os outros países. Portanto, para calcular, por exeemplo, a contribuição do GDP per capita da Noruega, subtraímos o GDP per capita da Noruega pelo GDP per capita de Dystopia e multiplicamos pelo coeficiente de contribuição do GDP per capita na felicidade. O residual que obtemos é somado com o valor da felicidade em Dystopia, para obter uma medida positiva, e assim obtemos o gráfico. Observe que, se o valor de Dystopia+Residual é menor que a felicidade em Dystopia, temos um residual negativo e um país mais triste que o previsto, e vice-versa.</p>
+                <div class="slider-container">
+                    <div>
+                      <input id="year-slider-happiness-factor" class="year-slider" type="range" min="1" max="3" steps="1" value="3" >
+                    </div>
+                    <ul class="range-labels">
+                      <span>2014</span>
+                      <span>2015</span>
+                      <span class="active">2016</span>
+                    </ul>
+                </div>
                 <figure>
                     <div id="happinessFactorsContainer">
                         <div id="happinessFactors"></div>

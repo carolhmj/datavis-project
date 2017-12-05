@@ -263,6 +263,10 @@ div.dc-chart {
     stroke-opacity: 0.2;
 }
 
+.bar {
+    transition:.3s ease;
+}
+
 .dc-chart path.dc-symbol,
 g.dc-legend-item.fadeout {
     fill-opacity: 0.5;

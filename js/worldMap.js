@@ -120,11 +120,27 @@ function WorldMap(){
     function onSliderInput(data){
         createHappinessHashMap(data);
         topoLayer.eachLayer(handleLayer);
+        buildHappinessFactors();
+        happinessFactors.redraw();
+        // refazer gráfico??? buildHappinessFactors();
     }
 
-    //check if slider has changed
-    $('#year-slider').on('input',function(){
+    const yearSliders = $('.year-slider')
+
+    //if slider has changed do some visualization updates
+    yearSliders.on('input',function(){
+        //change year used in happiness factors chart
+        if (this.value == 1){ sliderYear = 2014 }
+        if (this.value == 2){ sliderYear = 2015 }
+        if (this.value == 3){ sliderYear = 2016 }
+
+        //change map data, reload map and happiness factors chart
         d3.csv(happinessData[this.value-1], onSliderInput);
+
+        //update slider thumbs
+        for (let i = 0; i < yearSliders.length; i++){
+            yearSliders[i].value = this.value;
+        }
 
         //update year label colors
         $('.range-labels span').removeClass('active');
@@ -133,6 +149,7 @@ function WorldMap(){
 
     //check if year label was clicked
     $('.range-labels span').on('click',function() {
-        $('#year-slider').val(($(this).index()) + 1).trigger('input');
+        yearSliders.val(($(this).index()) + 1).trigger('input');
     });
+    
 }

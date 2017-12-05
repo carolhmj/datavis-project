@@ -1,25 +1,29 @@
-let happinessAndSuicide = dc.seriesChart("#happinessAndSuicide");
-let happinessFactors = dc.barChart("#happinessFactors");
-let happinessChanges = dc.seriesChart("#happinessChanges");
-let countryResiduals = dc.barChart("#countryResiduals");
-let regionResiduals = dc.barChart("#regionResiduals");
+const happinessAndSuicide = dc.seriesChart("#happinessAndSuicide"),
+	  happinessFactors = dc.barChart("#happinessFactors"),
+	  happinessChanges = dc.seriesChart("#happinessChanges"),
+	  countryResiduals = dc.barChart("#countryResiduals"),
+	  regionResiduals = dc.barChart("#regionResiduals"),
 
-let explLogGDP = "Explained by: Log GDP per capita";
-let explSocialSupport = "Explained by: Social support";
-let explHealthyLife = "Explained by: Healthy life expectancy";
-let explLifeChoices = "Explained by: Freedom to make life choices";
-let explGenerosity = "Explained by: Generosity";
-let explCorruption = "Explained by: Perceptions of corruption";
-let residualPlusDystopia = "Dystopia + residual";
-let ladderScore = "Ladder score";
-let lifeLadder = "Life Ladder";
-let referenceArea = "Reference Area";
-let timePeriod = "Time Period";
-let WP5Country = "WP5 Country";
+	  explLogGDP = "Explained by: Log GDP per capita",
+	  explSocialSupport = "Explained by: Social support",
+	  explHealthyLife = "Explained by: Healthy life expectancy",
+	  explLifeChoices = "Explained by: Freedom to make life choices",
+	  explGenerosity = "Explained by: Generosity",
+	  explCorruption = "Explained by: Perceptions of corruption",
+	  residualPlusDystopia = "Dystopia + residual",
+	  happinessScore = "Happiness score",
+	  lifeLadder = "Life Ladder",
+	  referenceArea = "Reference Area",
+	  timePeriod = "Time Period",
+	  WP5Country = "WP5 Country";
+
+let sliderYear = 2016;
 
 d3.queue()
 	.defer(d3.csv, "data/HappinessReport/whrAllYears.csv")
 	.defer(d3.csv, "data/HappinessReport/whr2015.csv")
+	.defer(d3.csv, "data/HappinessReport/whr2016.csv")
+	.defer(d3.csv, "data/HappinessReport/whr2017.csv")
 	.defer(d3.csv, "data/suicide_mortality.csv")
 	.defer(d3.csv, "data/CountriesRegionWHR.csv")
 	.await(buildCharts);
@@ -39,7 +43,7 @@ let regionByCountry = d3.map();
 let dystopiaByYear = {'2015': 2.10, '2016': 2.33, '2017': 1.85}
 let shownCountriesHappinessChanges = ["Brazil", "Egypt", "Greece", "Syria", "Liberia", "Venezuela"];
 
-function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
+function buildCharts(error, happinessAll, happiness2015, happiness2016, happiness2017, suicideRate, regions) {
 	let countriesData = [];		
 
 	regions.forEach(d => {
@@ -56,9 +60,37 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	});
 
 	happiness2015.forEach(function(d) {
-		let index = countriesData.findIndex(c => c.year == 2015 && c.country == d.country);
+		let index = countriesData.findIndex(c => c.year == 2014 && c.country == d.country);
 		if (index > -1) {
-			countriesData[index][ladderScore] = +d[ladderScore];
+			countriesData[index][happinessScore] = +d[happinessScore];
+			countriesData[index][explLogGDP] = +d[explLogGDP];
+			countriesData[index][explHealthyLife] = +d[explHealthyLife];
+			countriesData[index][explSocialSupport] = +d[explSocialSupport];
+			countriesData[index][explLifeChoices] = +d[explLifeChoices];
+			countriesData[index][explGenerosity] = +d[explGenerosity];
+			countriesData[index][explCorruption] = +d[explCorruption];
+			countriesData[index][residualPlusDystopia] = +d[residualPlusDystopia];
+		}
+	});
+
+	happiness2016.forEach(function(d) {
+		let index = countriesData.findIndex(c => c.year == 2015 && c.country == d.Country);
+		if (index > -1) {
+			countriesData[index][happinessScore] = +d[happinessScore];
+			countriesData[index][explLogGDP] = +d[explLogGDP];
+			countriesData[index][explHealthyLife] = +d[explHealthyLife];
+			countriesData[index][explSocialSupport] = +d[explSocialSupport];
+			countriesData[index][explLifeChoices] = +d[explLifeChoices];
+			countriesData[index][explGenerosity] = +d[explGenerosity];
+			countriesData[index][explCorruption] = +d[explCorruption];
+			countriesData[index][residualPlusDystopia] = +d[residualPlusDystopia];
+		}
+	});
+
+	happiness2017.forEach(function(d) {
+		let index = countriesData.findIndex(c => c.year == 2016 && c.country == d.Country);
+		if (index > -1) {
+			countriesData[index][happinessScore] = +d[happinessScore];
 			countriesData[index][explLogGDP] = +d[explLogGDP];
 			countriesData[index][explHealthyLife] = +d[explHealthyLife];
 			countriesData[index][explSocialSupport] = +d[explSocialSupport];
@@ -70,7 +102,7 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	});
 
 	countriesData.filter(d => d.year == 2015).forEach(d => {
-		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + 'is NaN residualPlusDystopia');}
+		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + ' is NaN residualPlusDystopia');}
 	});
 
 	countryFacts = crossfilter(countriesData);
@@ -87,7 +119,7 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	buildHappinessAndSuicide();
 	buildCountryResiduals();
 	buildRegionResiduals();
-	resizeCharts();
+	dc.renderAll();
 }
 
 function buildRegionResiduals() {
@@ -114,7 +146,10 @@ function buildRegionResiduals() {
 
 	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && !isNaN(d.value.sum) && !isNaN(d.value.count));
 
-	let allRegions = residualGroup.all().sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count).map(d => d.key[0]).filter(d => !(typeof d == "undefined"));
+	let allRegions = residualGroup.all()
+								.sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count)
+								.map(d => d.key[0])
+								.filter(d => !(typeof d == "undefined"));
 	console.log(allRegions);
 
 	let _bbox = regionResiduals.root().node().parentNode.getBoundingClientRect();
@@ -137,7 +172,11 @@ function buildCountryResiduals() {
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let residualGroup = countryDimension.group().reduceSum(d => d[residualPlusDystopia]);
 
-	let countriesWithResiduals = residualGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value - c1.value;}).map(d => d.key[0]);
+	let countriesWithResiduals = residualGroup
+								.top(Infinity)
+								.filter(d => d.key[1] == 2015)
+								.sort((c1, c2) => {return c2.value - c1.value;})
+								.map(d => d.key[0]);
 	let topBottomCountries = countriesWithResiduals.slice(0,5).concat(countriesWithResiduals.slice(-5));
 	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) > -1 && !isNaN(d.value));
 
@@ -191,7 +230,7 @@ function buildHappinessChange() {
 					.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(_bbox.width-100).y(_bbox.height-150).legendWidth(140).itemWidth(150));
 }
 
-function buildHappinessFactors(happiness) {
+function buildHappinessFactors() {
 	var countryDimension = countryFacts.dimension(d => [d.country, d.year, d.happiness]);
 	var factorsGroup = countryDimension.group().reduce(function (p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) + v[explLogGDP];
@@ -201,7 +240,7 @@ function buildHappinessFactors(happiness) {
 		p[explCorruption] = (p[explCorruption] | 0) + v[explCorruption];
 		p[explLifeChoices] = (p[explLifeChoices] | 0) + v[explLifeChoices];
 		p[residualPlusDystopia] = (p[residualPlusDystopia] | 0) + v[residualPlusDystopia];
-		p[ladderScore] = (p[ladderScore] | 0) + v[ladderScore];
+		p[happinessScore] = (p[happinessScore] | 0) + v[happinessScore];
 		return p;
 	}, function(p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) - v[explLogGDP];
@@ -211,18 +250,21 @@ function buildHappinessFactors(happiness) {
 		p[explCorruption] = (p[explCorruption] | 0) - v[explCorruption];
 		p[explLifeChoices] = (p[explLifeChoices] | 0) - v[explLifeChoices];
 		p[residualPlusDystopia] = (p[residualPlusDystopia] | 0) - v[residualPlusDystopia];
-		p[ladderScore] = (p[ladderScore] | 0) - v[ladderScore];
+		p[happinessScore] = (p[happinessScore] | 0) - v[happinessScore];
 		return p;
 	}, function(p, v) {
 		return {};
 	});
 
-	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value[ladderScore] - c1.value[ladderScore]}).map(x => x.key[0]);
+	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d =>
+		d.key[1] == sliderYear && !(isNaN(d.value[happinessScore])))
+									.sort((c1, c2) => {return c2.value[happinessScore] - c1.value[happinessScore]})
+									.map(x => x.key[0]);
 
-	let topBottomCountries = countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5));
+	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5)));
 
 	var filteredGroup = filterBins(factorsGroup, function(d) {
-		return d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
+		return d.key[1] == sliderYear && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
 	});
 
 	function sel_stack(elem) {
@@ -231,33 +273,47 @@ function buildHappinessFactors(happiness) {
 		}
 	}
 
+	var domain = d3.scale.ordinal()
+		.domain([0,7])
+		.range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628']);
+
 	//We swap the width and height so the graph is drawn correctly
 	var rect =  _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.height;
 	var chartHeight = _bbox.width;
-
+	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
+	$("#happinessFactorsContainer").parent().css("overflow","hidden");
 	happinessFactors.width(chartWidth)
-		 .height(chartHeight)
-		 .gap(20)
-		 .x(d3.scale.ordinal().domain(topBottomCountries))
-		 .xUnits(dc.units.ordinal)
-		 .margins({left: 40, top: 80, right: 170, bottom: 40})
-		 .brushOn(false)
-		 .elasticY(true)
-		 .dimension(countryDimension)
-		 .keyAccessor(d => d.key[0])
-		 .group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia));
-
-	 
-	happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
-	happinessFactors.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
-	happinessFactors.stack(filteredGroup, explHealthyLife, sel_stack(explHealthyLife));
-	happinessFactors.stack(filteredGroup, explSocialSupport, sel_stack(explSocialSupport));
-	happinessFactors.stack(filteredGroup, explCorruption, sel_stack(explCorruption));
-	happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
+		.height(chartHeight)
+		.gap(10)
+		.x(d3.scale.ordinal().domain(topBottomCountries))
+		.xUnits(dc.units.ordinal)
+		.margins({left: 30, top: 80, right: 170, bottom: 75})
+		.brushOn(false)
+		.elasticY(true)
+		.dimension(countryDimension)
+		.keyAccessor(d => d.key[0])
+		.group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia))
+		.title(function(d) {
+			return this.layer + '\n' + d.value[this.layer];
+		})
+		.movableStacks(true)
+		.legend(dc.legend().x(310)
+			.y(chartHeight - 40)
+			.rotation(270)
+			.horizontal(true)
+			.itemWidth(250)
+			.legendWidth(chartHeight));
+	
+		happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
+		happinessFactors.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
+		happinessFactors.stack(filteredGroup, explHealthyLife, sel_stack(explHealthyLife));
+		happinessFactors.stack(filteredGroup, explSocialSupport, sel_stack(explSocialSupport));
+		happinessFactors.stack(filteredGroup, explCorruption, sel_stack(explCorruption));
+		happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
 }
 
-function buildHappinessAndSuicide(happiness, suicideRate) {
+function buildHappinessAndSuicide() {
 	
 	let happinessAndSuicideDimension = countryFacts.dimension(d => [d.happiness, d.suicide, d.country, d.year]);
 	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[3] == 2015 && !isNaN(d.key[1]));
@@ -302,36 +358,17 @@ function buildHappinessAndSuicide(happiness, suicideRate) {
 		.valueAccessor(d => !(typeof d == "undefined") ? d.key[1] : null)
 		.title(function(d) {
 			return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
-		});
+		})
+		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
 
-}	
-	
+}
+
 $(window).on("resize", function() {
 	resizeCharts();
 });
 
 function resizeCharts() {
-	var rect = _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
-	var chartWidth = _bbox.height;
-	var chartHeight = _bbox.width;
-	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
-	happinessFactors.width(chartWidth)
-		.height(chartHeight)
-		.legend(dc.legend().x($("#happinessFactors").width())
-			.y(chartHeight)
-			.rotation(270)
-			.horizontal(true)
-			.itemWidth(250)
-			.legendWidth(chartHeight));
-
-	rect = _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
-	chartWidth = _bbox.width;
-	chartHeight = _bbox.height;
-	happinessAndSuicide.width(chartWidth)
-		.height(chartHeight)
-		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
-	happinessChanges.width(_bbox.width)
-					.height(_bbox.height)
-					.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(_bbox.width-100).y(_bbox.height-150).legendWidth(140).itemWidth(150));	
-	dc.renderAll();
+	buildHappinessFactors();
+	buildHappinessAndSuicide();
+	dc.redrawAll();
 }
