@@ -4281,6 +4281,7 @@
             ran[i] = findLayerByName(stackName);
             ran[j] = temp;
             _stack = ran;
+            
             return _chart;
         };
     
@@ -4489,7 +4490,11 @@
             if(_movableStacks) {
                 _chart.moveStack(d.name);
                 //_chart.redraw();
-                _chart.renderGroup();
+                _chart.redrawGroup();
+                _chart.legendHighlight(false);
+                _chart.on('postRedraw', function(chart){
+                    chart.legendHighlight(d);
+                });
             }
         };
     
