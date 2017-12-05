@@ -94,15 +94,15 @@ function buildRegionResiduals() {
 	let residualGroup = regionDimension.group().reduce(
 		(p,v) => {
 			if (!isNaN(v[residualPlusDystopia])) {
-				++p.count; 
-				p.sum += v[residualPlusDystopia];
+				//++p.count; 
+				//p.sum += v[residualPlusDystopia];
 			}
 			return p;
 		},
 		(p,v) => {
 			if (!isNaN(residualPlusDystopia)) {
-				--p.count;
-				p.sum -= v[residualPlusDystopia];
+				//--p.count;
+				//p.sum -= v[residualPlusDystopia];
 			}
 		},
 		() => {
@@ -110,7 +110,7 @@ function buildRegionResiduals() {
 		}
 	);
 
-	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && !isNaN(d.value.sum) && !isNaN(d.value.count));
+	//residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && !isNaN(d.value.sum) && !isNaN(d.value.count));
 
 	let allRegions = residualGroup.all().sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count).map(d => d.key[0]).filter(d => !(typeof d == "undefined"));
 	console.log(allRegions);
@@ -125,7 +125,7 @@ function buildRegionResiduals() {
 				   .dimension(regionDimension)
 				   .group(residualGroup)
 				   .keyAccessor(d => d.key[0])
-				   .valueAccessor(d => d.value.sum / d.value.count)
+				   //.valueAccessor(d => d.value.sum / d.value.count)
 				   .renderHorizontalGridLines(true)
 				   .colors(["#0e8373"]);
 }
@@ -217,10 +217,16 @@ function buildHappinessFactors() {
 		}
 	}
 
+	var domain = d3.scale.ordinal()
+		.domain([0,7])
+		.range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
+
 	//We swap the width and height so the graph is drawn correctly
 	var rect =  _bbox = happinessFactors.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.height;
 	var chartHeight = _bbox.width;
+
+	var count = 0;
 
 	happinessFactors.width(chartWidth)
 		.height(chartHeight)
@@ -230,21 +236,26 @@ function buildHappinessFactors() {
 		.margins({left: 30, top: 80, right: 170, bottom: 75})
 		.brushOn(false)
 		.elasticY(true)
+		.colors(domain)
 		.dimension(countryDimension)
 		.keyAccessor(d => d.key[0])
 		.group(filteredGroup, residualPlusDystopia, sel_stack(residualPlusDystopia))
 		.title(function(d) {
 			return this.layer + '\n' + d.value[this.layer];
+		})
+		.movableStacks(true)
+		.on("filtered", function() {
+			$(".reset").show();
 		});
-
-	 
-	happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
-	happinessFactors.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
-	happinessFactors.stack(filteredGroup, explHealthyLife, sel_stack(explHealthyLife));
-	happinessFactors.stack(filteredGroup, explSocialSupport, sel_stack(explSocialSupport));
-	happinessFactors.stack(filteredGroup, explCorruption, sel_stack(explCorruption));
-	happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
+	
+		happinessFactors.stack(filteredGroup, explLogGDP, sel_stack(explLogGDP));
+		happinessFactors.stack(filteredGroup, explLifeChoices, sel_stack(explLifeChoices));
+		happinessFactors.stack(filteredGroup, explHealthyLife, sel_stack(explHealthyLife));
+		happinessFactors.stack(filteredGroup, explSocialSupport, sel_stack(explSocialSupport));
+		happinessFactors.stack(filteredGroup, explCorruption, sel_stack(explCorruption));
+		happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
 }
+
 
 function buildHappinessAndSuicide() {
 	
@@ -285,8 +296,8 @@ function buildHappinessAndSuicide() {
 		.brushOn(false)
 		.colors(domain)
 		.seriesAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[2]) : null)
-		.keyAccessor(d => !(typeof d == "undefined") ? d.key[0] : null)
-		.valueAccessor(d => !(typeof d == "undefined") ? d.key[1] : null)
+		.keyAccessor(d => d.key[0])
+		.valueAccessor(d => d.key[1])
 		.title(function(d) {
 			return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
 	});
