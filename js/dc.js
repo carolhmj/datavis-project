@@ -4204,7 +4204,6 @@
                 layer.accessor = accessor;
             }
             _stack.push(layer);
-            _stackAux.push(layer);
     
             return _chart;
         };
@@ -4462,6 +4461,9 @@
         });
     
         _chart.legendables = function () {
+            if (_stackAux.length == 0) {
+                _stackAux = _stack.slice();
+            }
             return _stackAux.map(function (layer, i) {
                 return {
                     chart: _chart,
