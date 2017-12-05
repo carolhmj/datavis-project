@@ -268,7 +268,7 @@ function buildHappinessFactors() {
 	var chartWidth = _bbox.height;
 	var chartHeight = _bbox.width;
 	$("#happinessFactorsContainer").css("margin-left",chartHeight - 70);
-	$("#happinessFactorsContainer").parent().css("overflow-x","hidden");
+	$("#happinessFactorsContainer").parent().css("overflow","hidden");
 	happinessFactors.width(chartWidth)
 		.height(chartHeight)
 		.gap(10)
