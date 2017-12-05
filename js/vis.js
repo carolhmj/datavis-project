@@ -1,25 +1,29 @@
-let happinessAndSuicide = dc.seriesChart("#happinessAndSuicide");
-let happinessFactors = dc.barChart("#happinessFactors");
-let happinessChanges = dc.seriesChart("#happinessChanges");
-let countryResiduals = dc.barChart("#countryResiduals");
-let regionResiduals = dc.barChart("#regionResiduals");
+const happinessAndSuicide = dc.seriesChart("#happinessAndSuicide"),
+	  happinessFactors = dc.barChart("#happinessFactors"),
+	  happinessChanges = dc.seriesChart("#happinessChanges"),
+	  countryResiduals = dc.barChart("#countryResiduals"),
+	  regionResiduals = dc.barChart("#regionResiduals"),
 
-let explLogGDP = "Explained by: Log GDP per capita";
-let explSocialSupport = "Explained by: Social support";
-let explHealthyLife = "Explained by: Healthy life expectancy";
-let explLifeChoices = "Explained by: Freedom to make life choices";
-let explGenerosity = "Explained by: Generosity";
-let explCorruption = "Explained by: Perceptions of corruption";
-let residualPlusDystopia = "Dystopia + residual";
-let ladderScore = "Ladder score";
-let lifeLadder = "Life Ladder";
-let referenceArea = "Reference Area";
-let timePeriod = "Time Period";
-let WP5Country = "WP5 Country";
+	  explLogGDP = "Explained by: Log GDP per capita",
+	  explSocialSupport = "Explained by: Social support",
+	  explHealthyLife = "Explained by: Healthy life expectancy",
+	  explLifeChoices = "Explained by: Freedom to make life choices",
+	  explGenerosity = "Explained by: Generosity",
+	  explCorruption = "Explained by: Perceptions of corruption",
+	  residualPlusDystopia = "Dystopia + residual",
+	  happinessScore = "Happiness score",
+	  lifeLadder = "Life Ladder",
+	  referenceArea = "Reference Area",
+	  timePeriod = "Time Period",
+	  WP5Country = "WP5 Country";
+
+let sliderYear = 2016;
 
 d3.queue()
 	.defer(d3.csv, "data/HappinessReport/whrAllYears.csv")
 	.defer(d3.csv, "data/HappinessReport/whr2015.csv")
+	.defer(d3.csv, "data/HappinessReport/whr2016.csv")
+	.defer(d3.csv, "data/HappinessReport/whr2017.csv")
 	.defer(d3.csv, "data/suicide_mortality.csv")
 	.defer(d3.csv, "data/CountriesRegionWHR.csv")
 	.await(buildCharts);
@@ -37,7 +41,7 @@ function filterBins(source_group, f) {
 let countryFacts;
 let regionByCountry = d3.map();
 
-function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
+function buildCharts(error, happinessAll, happiness2015, happiness2016, happiness2017, suicideRate, regions) {
 	let countriesData = [];		
 
 	regions.forEach(d => {
@@ -54,9 +58,37 @@ function buildCharts(error, happinessAll, happiness2015, suicideRate, regions) {
 	});
 
 	happiness2015.forEach(function(d) {
-		let index = countriesData.findIndex(c => c.year == 2015 && c.country == d.country);
+		let index = countriesData.findIndex(c => c.year == 2014 && c.country == d.country);
 		if (index > -1) {
-			countriesData[index][ladderScore] = +d[ladderScore];
+			countriesData[index][happinessScore] = +d[happinessScore];
+			countriesData[index][explLogGDP] = +d[explLogGDP];
+			countriesData[index][explHealthyLife] = +d[explHealthyLife];
+			countriesData[index][explSocialSupport] = +d[explSocialSupport];
+			countriesData[index][explLifeChoices] = +d[explLifeChoices];
+			countriesData[index][explGenerosity] = +d[explGenerosity];
+			countriesData[index][explCorruption] = +d[explCorruption];
+			countriesData[index][residualPlusDystopia] = +d[residualPlusDystopia];
+		}
+	});
+
+	happiness2016.forEach(function(d) {
+		let index = countriesData.findIndex(c => c.year == 2015 && c.country == d.Country);
+		if (index > -1) {
+			countriesData[index][happinessScore] = +d[happinessScore];
+			countriesData[index][explLogGDP] = +d[explLogGDP];
+			countriesData[index][explHealthyLife] = +d[explHealthyLife];
+			countriesData[index][explSocialSupport] = +d[explSocialSupport];
+			countriesData[index][explLifeChoices] = +d[explLifeChoices];
+			countriesData[index][explGenerosity] = +d[explGenerosity];
+			countriesData[index][explCorruption] = +d[explCorruption];
+			countriesData[index][residualPlusDystopia] = +d[residualPlusDystopia];
+		}
+	});
+
+	happiness2017.forEach(function(d) {
+		let index = countriesData.findIndex(c => c.year == 2016 && c.country == d.Country);
+		if (index > -1) {
+			countriesData[index][happinessScore] = +d[happinessScore];
 			countriesData[index][explLogGDP] = +d[explLogGDP];
 			countriesData[index][explHealthyLife] = +d[explHealthyLife];
 			countriesData[index][explSocialSupport] = +d[explSocialSupport];
@@ -112,7 +144,10 @@ function buildRegionResiduals() {
 
 	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && !isNaN(d.value.sum) && !isNaN(d.value.count));
 
-	let allRegions = residualGroup.all().sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count).map(d => d.key[0]).filter(d => !(typeof d == "undefined"));
+	let allRegions = residualGroup.all()
+								.sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count)
+								.map(d => d.key[0])
+								.filter(d => !(typeof d == "undefined"));
 	console.log(allRegions);
 
 	let _bbox = regionResiduals.root().node().parentNode.getBoundingClientRect();
@@ -134,7 +169,11 @@ function buildCountryResiduals() {
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let residualGroup = countryDimension.group().reduceSum(d => d[residualPlusDystopia]);
 
-	let countriesWithResiduals = residualGroup.top(Infinity).filter(d => d.key[1] == 2015).sort((c1, c2) => {return c2.value - c1.value;}).map(d => d.key[0]);
+	let countriesWithResiduals = residualGroup
+								.top(Infinity)
+								.filter(d => d.key[1] == 2015)
+								.sort((c1, c2) => {return c2.value - c1.value;})
+								.map(d => d.key[0]);
 	let topBottomCountries = countriesWithResiduals.slice(0,5).concat(countriesWithResiduals.slice(-5));
 	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) > -1 && !isNaN(d.value));
 
@@ -187,7 +226,7 @@ function buildHappinessFactors() {
 		p[explCorruption] = (p[explCorruption] | 0) + v[explCorruption];
 		p[explLifeChoices] = (p[explLifeChoices] | 0) + v[explLifeChoices];
 		p[residualPlusDystopia] = (p[residualPlusDystopia] | 0) + v[residualPlusDystopia];
-		p[ladderScore] = (p[ladderScore] | 0) + v[ladderScore];
+		p[happinessScore] = (p[happinessScore] | 0) + v[happinessScore];
 		return p;
 	}, function(p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) - v[explLogGDP];
@@ -197,18 +236,21 @@ function buildHappinessFactors() {
 		p[explCorruption] = (p[explCorruption] | 0) - v[explCorruption];
 		p[explLifeChoices] = (p[explLifeChoices] | 0) - v[explLifeChoices];
 		p[residualPlusDystopia] = (p[residualPlusDystopia] | 0) - v[residualPlusDystopia];
-		p[ladderScore] = (p[ladderScore] | 0) - v[ladderScore];
+		p[happinessScore] = (p[happinessScore] | 0) - v[happinessScore];
 		return p;
 	}, function(p, v) {
 		return {};
 	});
 
-	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d => d.key[1] == 2015 && !(isNaN(d.value[ladderScore]))).sort((c1, c2) => {return c2.value[ladderScore] - c1.value[ladderScore]}).map(x => x.key[0]);
+	let countriesWithHappinessScores = factorsGroup.top(Infinity).filter(d =>
+		d.key[1] == sliderYear && !(isNaN(d.value[happinessScore])))
+									.sort((c1, c2) => {return c2.value[happinessScore] - c1.value[happinessScore]})
+									.map(x => x.key[0]);
 
 	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5)));
 
 	var filteredGroup = filterBins(factorsGroup, function(d) {
-		return d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
+		return d.key[1] == sliderYear && $.inArray(d.key[0], topBottomCountries) >= 0 && !isNaN(d.value[explLogGDP]); 
 	});
 
 	function sel_stack(elem) {
