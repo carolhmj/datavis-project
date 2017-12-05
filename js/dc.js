@@ -4476,6 +4476,8 @@
             var layer = findLayerByName(d.name);
             return layer ? layer.hidden : false;
         };
+
+        var isLegendableMoving = false;
     
         _chart.legendToggle = function (d) {
             if (_hidableStacks) {
@@ -4492,8 +4494,12 @@
                 //_chart.redraw();
                 _chart.redrawGroup();
                 _chart.legendHighlight(false);
+                isLegendableMoving = true;
                 _chart.on('postRedraw', function(chart){
-                    chart.legendHighlight(d);
+                    if (isLegendableMoving) {
+                        chart.legendHighlight(d);
+                        isLegendableMoving = false;
+                    }
                 });
             }
         };
