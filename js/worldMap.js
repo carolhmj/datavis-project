@@ -173,6 +173,9 @@ function setMapTo(country){
         case "Costa Rica":
             map.flyTo([9.74,-83.75], 7);
             break;
+        case "Argelia":
+            map.flyTo([9.74,-83.75], 7);
+            break;
         default:
             map.setView([20,0], 2);
     }
