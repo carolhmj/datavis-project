@@ -87,3 +87,15 @@ div#regionResiduals {
   z-index: 450;
 	opacity: 0.8;
 }
+
+.clickable-text {
+	color: #0E8373;
+	font-style: italic;
+	cursor: pointer;
+}
+
+.map-text {
+	margin-top: 15px;
+	max-height: 200px;
+	overflow-y: auto;
+}
