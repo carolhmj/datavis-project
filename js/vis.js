@@ -39,6 +39,7 @@ function filterBins(source_group, f) {
 }
 
 let countryFacts;
+let countryDimension;
 let regionByCountry = d3.map();
 let dystopiaByYear = {'2015': 2.10, '2016': 2.33, '2017': 1.85}
 let shownCountriesHappinessChanges = ["Brazil", "Egypt", "Greece", "Syria", "Liberia", "Venezuela"];
@@ -101,7 +102,7 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 		}
 	});
 
-	countriesData.filter(d => d.year == 2015).forEach(d => {
+	countriesData.forEach(d => {
 		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + ' is NaN residualPlusDystopia');}
 	});
 
@@ -113,7 +114,8 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 		if (index > -1) {
 			countriesData[index].suicide = +d.Value;
 		}
- 	});
+	 });
+	countryDimension = countryFacts.dimension(d => [d.country, d.year, d.happiness, d.suicide, d.region]);
 	buildHappinessChange();
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
@@ -124,7 +126,7 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 
 function buildRegionResiduals() {
 	console.log('build region residuals');
-	let regionDimension = countryFacts.dimension(d => [d.region, d.year]);
+	let regionDimension = countryDimension;
 	let residualGroup = regionDimension.group().reduce(
 		(p,v) => {
 			if (!isNaN(v[residualPlusDystopia])) {
@@ -148,7 +150,7 @@ function buildRegionResiduals() {
 
 	let allRegions = residualGroup.all()
 								.sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count)
-								.map(d => d.key[0])
+								.map(d => d.key[4])
 								.filter(d => !(typeof d == "undefined"));
 	console.log(allRegions);
 
@@ -162,14 +164,14 @@ function buildRegionResiduals() {
 				   .yAxisLabel("Dystopia (" + dystopiaByYear["2015"] + ") + Residual")
 				   .dimension(regionDimension)
 				   .group(residualGroup)
-				   .keyAccessor(d => d.key[0])
+				   .keyAccessor(d => d.key[4])
 				   .valueAccessor(d => d.value.sum / d.value.count)
 				   .renderHorizontalGridLines(true)
 				   .colors(["#0e8373"]);
 }
 
 function buildCountryResiduals() {
-	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
+	//let countryDimension = countryDimension;
 	let residualGroup = countryDimension.group().reduceSum(d => d[residualPlusDystopia]);
 
 	let countriesWithResiduals = residualGroup
@@ -203,7 +205,7 @@ function buildCountryResiduals() {
 
 function buildHappinessChange() {
 	console.log('build happiness change');
-	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
+	//let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);
 
 	happinessGroup = filterBins(happinessGroup, d => $.inArray(d.key[0], shownCountriesHappinessChanges) > -1);
@@ -231,7 +233,7 @@ function buildHappinessChange() {
 }
 
 function buildHappinessFactors() {
-	var countryDimension = countryFacts.dimension(d => [d.country, d.year, d.happiness]);
+	//var countryDimension = countryFacts.dimension(d => [d.country, d.year, d.happiness]);
 	var factorsGroup = countryDimension.group().reduce(function (p, v) {
 		p[explLogGDP] = (p[explLogGDP] | 0) + v[explLogGDP];
 		p[explHealthyLife] = (p[explHealthyLife] | 0) + v[explHealthyLife];
@@ -314,9 +316,10 @@ function buildHappinessFactors() {
 }
 
 function buildHappinessAndSuicide() {
-	
-	let happinessAndSuicideDimension = countryFacts.dimension(d => [d.happiness, d.suicide, d.country, d.year]);
-	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[3] == 2015 && !isNaN(d.key[1]));
+	//d.happiness, d.suicide, d.country, d.year
+	//d.country, d.year, d.happiness, d.suicide
+	let happinessAndSuicideDimension = countryDimension;
+	let happinessAndSuicideGroup = filterBins(happinessAndSuicideDimension.group(), d => d.key[1] == 2015 && !isNaN(d.key[3]));
 
 	var rect =  _bbox = happinessAndSuicide.root().node().parentNode.getBoundingClientRect();
 	var chartWidth = _bbox.width;
@@ -328,12 +331,12 @@ function buildHappinessAndSuicide() {
 						 .range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']);
 
 	//set x and y chart values, they need to be a little bigger so data can fit correctly on chart
-	const xValue = d3.extent(happinessAndSuicideGroup.all().map(d => d.key[0])),
-		  yValue = d3.extent(happinessAndSuicideGroup.all().map(d => d.key[1]));
-	xValue[0] -= 0.5;
-	xValue[1] += 0.5;
-	yValue[0] -= 0.5;
-	yValue[1] += 0.5;
+	const xValue = d3.extent(happinessAndSuicideGroup.all().map(d => d.key[2])),
+		  yValue = d3.extent(happinessAndSuicideGroup.all().map(d => d.key[3]));
+	xValue[2] -= 0.5;
+	xValue[3] += 0.5;
+	yValue[2] -= 0.5;
+	yValue[3] += 0.5;
 
 	var subChart = function(c) {
 		return dc.scatterPlot(c)
@@ -353,11 +356,11 @@ function buildHappinessAndSuicide() {
 		.group(happinessAndSuicideGroup)
 		.brushOn(false)
 		.colors(domain)
-		.seriesAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[2]) : null)
-		.keyAccessor(d => !(typeof d == "undefined") ? d.key[0] : null)
-		.valueAccessor(d => !(typeof d == "undefined") ? d.key[1] : null)
+		.seriesAccessor(d => !(typeof d == "undefined") ? regionByCountry.get(d.key[0]) : null)
+		.keyAccessor(d => !(typeof d == "undefined") ? d.key[2] : null)
+		.valueAccessor(d => !(typeof d == "undefined") ? d.key[3] : null)
 		.title(function(d) {
-			return d.key[2] + "\n" + "Happiness: " + d.key[0] + "\n" + "Suicide: " + d.key[1];
+			return d.key[2] + "\n" + "Happiness: " + d.key[2] + "\n" + "Suicide: " + d.key[3];
 		})
 		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
 
