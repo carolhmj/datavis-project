@@ -104,6 +104,6 @@ a {
 dl {
     background-color: #0e837215 !important;
     padding:15px 5px;
-    margin:1px;
+    margin: 1px auto !important;
     border-left: 5px solid #0e8373;
 }
