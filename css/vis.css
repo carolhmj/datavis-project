@@ -55,12 +55,22 @@ div#countryResiduals {
 }
 
 div#regionResidualsContainer {
-	width: 85vw;
-	height: 70vh;
+	width: 75vw;
+	height: 80vh;
+	margin-bottom: 100px;
 }
 
 div#regionResiduals {
 	position: absolute;
+}
+
+#regionResiduals .x text {
+    text-anchor: end !important;
+    transform: rotate(-45deg);
+}
+
+.label-spacing {
+	margin-top: 100px;
 }
 
 .hidden {
