@@ -101,10 +101,6 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 		}
 	});
 
-	countriesData.filter(d => d.year == 2015).forEach(d => {
-		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + ' is NaN residualPlusDystopia');}
-	});
-
 	countryFacts = crossfilter(countriesData);
 	
 	suicideRate.filter(d => d.Sex == "Total");
@@ -123,7 +119,6 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 }
 
 function buildRegionResiduals() {
-	console.log('build region residuals');
 	let regionDimension = countryFacts.dimension(d => [d.region, d.year]);
 	let residualGroup = regionDimension.group().reduce(
 		(p,v) => {
@@ -150,7 +145,6 @@ function buildRegionResiduals() {
 								.sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count)
 								.map(d => d.key[0])
 								.filter(d => !(typeof d == "undefined"));
-	console.log(allRegions);
 
 	let _bbox = regionResiduals.root().node().parentNode.getBoundingClientRect();
 
@@ -202,13 +196,10 @@ function buildCountryResiduals() {
 }
 
 function buildHappinessChange() {
-	console.log('build happiness change');
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);
 
 	happinessGroup = filterBins(happinessGroup, d => $.inArray(d.key[0], shownCountriesHappinessChanges) > -1);
-
-	console.log(happinessGroup.all());
 
 	let _bbox = happinessChanges.root().node().parentNode.getBoundingClientRect();
 
