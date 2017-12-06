@@ -152,7 +152,10 @@ function setMapTo(country){
             map.flyTo([5.0,22.50], 3);
             break;
         case "Asia":
-            map.flyTo([35.04,130],3);
+            map.flyTo([35.04,130], 3);
+            break;
+        case "Costa Rica":
+            map.flyTo([9.74,-83.75], 7);
             break;
         default:
             map.setView([20,0], 2);
