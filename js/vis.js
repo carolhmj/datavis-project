@@ -42,6 +42,7 @@ let countryFacts;
 let regionByCountry = d3.map();
 let dystopiaByYear = {'2015': 2.10, '2016': 2.33, '2017': 1.85}
 let shownCountriesHappinessChanges = ["Brazil", "Egypt", "Greece", "Syria", "Liberia", "Venezuela"];
+let regionsResiduals2016 = ["Latin America\n and Caribbean", "North America\n and ANZ", "South Asia", "Western Europe", "Middle East\n and\n North Africa", "Central\n and\n Eastern Europe", "Commonwealth\n of\n Independent States", "Sub-Saharan\n Africa", "East Asia", "Southeast Asia"];
 
 function buildCharts(error, happinessAll, happiness2015, happiness2016, happiness2017, suicideRate, regions) {
 	let countriesData = [];		
@@ -101,10 +102,6 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 		}
 	});
 
-	countriesData.filter(d => d.year == 2015).forEach(d => {
-		if (isNaN(d[residualPlusDystopia])) {console.log(d.country + ' is NaN residualPlusDystopia');}
-	});
-
 	countryFacts = crossfilter(countriesData);
 	
 	suicideRate.filter(d => d.Sex == "Total");
@@ -117,13 +114,13 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 	buildHappinessChange();
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
-	buildCountryResiduals();
-	buildRegionResiduals();
+	buildCountryResiduals(2016);
+	buildRegionResiduals(2016);
 	dc.renderAll();
+	rotateXText();
 }
 
-function buildRegionResiduals() {
-	console.log('build region residuals');
+function buildRegionResiduals(year) {
 	let regionDimension = countryFacts.dimension(d => [d.region, d.year]);
 	let residualGroup = regionDimension.group().reduce(
 		(p,v) => {
@@ -144,7 +141,7 @@ function buildRegionResiduals() {
 		}
 	);
 
-	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && !isNaN(d.value.sum) && !isNaN(d.value.count));
+	residualGroup = filterBins(residualGroup, d => d.key[1] == year && !isNaN(d.value.sum) && !isNaN(d.value.count));
 
 	let allRegions = residualGroup.all()
 								.sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count)
@@ -159,26 +156,26 @@ function buildRegionResiduals() {
 				   .x(d3.scale.ordinal().domain(allRegions))
 				   .xUnits(dc.units.ordinal)
 				   .elasticY(true)
-				   .yAxisLabel("Dystopia (" + dystopiaByYear["2015"] + ") + Residual")
+				   .yAxisLabel("Dystopia (" + dystopiaByYear[year.toString()] + ") + Residual in" + year.toString())
 				   .dimension(regionDimension)
 				   .group(residualGroup)
 				   .keyAccessor(d => d.key[0])
 				   .valueAccessor(d => d.value.sum / d.value.count)
 				   .renderHorizontalGridLines(true)
-				   .colors(["#0e8373"]);
+				   .colors(["#0e8373"]);			   
 }
 
-function buildCountryResiduals() {
+function buildCountryResiduals(year) {
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let residualGroup = countryDimension.group().reduceSum(d => d[residualPlusDystopia]);
 
 	let countriesWithResiduals = residualGroup
 								.top(Infinity)
-								.filter(d => d.key[1] == 2015)
+								.filter(d => d.key[1] == year)
 								.sort((c1, c2) => {return c2.value - c1.value;})
 								.map(d => d.key[0]);
 	let topBottomCountries = countriesWithResiduals.slice(0,5).concat(countriesWithResiduals.slice(-5));
-	residualGroup = filterBins(residualGroup, d => d.key[1] == 2015 && $.inArray(d.key[0], topBottomCountries) > -1 && !isNaN(d.value));
+	residualGroup = filterBins(residualGroup, d => d.key[1] == year && $.inArray(d.key[0], topBottomCountries) > -1 && !isNaN(d.value));
 
 	let colorScale = d3.scale.quantize().domain([0,topBottomCountries.length-1]).range([1,2]);
 	
@@ -189,7 +186,7 @@ function buildCountryResiduals() {
 					.xUnits(dc.units.ordinal)
 					.x(d3.scale.ordinal().domain(topBottomCountries))
 					.elasticY(true)
-					.yAxisLabel("Dystopia (" + dystopiaByYear["2015"] + ") + Residual")
+					.yAxisLabel("Dystopia (" + dystopiaByYear[year.toString()] + ") + Residual in " + year.toString())
 					.dimension(countryDimension)
 					.group(residualGroup)
 					.keyAccessor(d => d.key[0])
@@ -202,7 +199,6 @@ function buildCountryResiduals() {
 }
 
 function buildHappinessChange() {
-	console.log('build happiness change');
 	let countryDimension = countryFacts.dimension(d => [d.country, d.year]);
 	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);
 
@@ -345,9 +341,9 @@ function buildHappinessAndSuicide() {
 		.height(chartHeight)
 		.chart(subChart)
 		.x(d3.scale.linear().domain(xValue))
-		.xAxisLabel("Happiness score")
+		.xAxisLabel("Happiness score in 2015")
 		.y(d3.scale.linear().domain(yValue))
-		.yAxisLabel("Suicide mortality rate (per 100,000 population)")
+		.yAxisLabel("Suicide mortality rate (per 100,000 population) in 2015")
 		.margins({left: 40, top: 40, right: 300, bottom: 40})
 		.dimension(happinessAndSuicideDimension)
 		.group(happinessAndSuicideGroup)
@@ -367,8 +363,27 @@ $(window).on("resize", function() {
 	resizeCharts();
 });
 
+function rotateXText() {
+	let h = +d3.select("#regionResiduals svg")
+	  .attr("height");
+	let w = +d3.select("#regionResiduals svg")
+	  .attr("width");
+
+	d3.select("#regionResiduals svg")
+	  .attr("height", h+100)
+	  .attr("width", w+50)
+
+	d3.select("#regionResiduals svg")
+	  .style("transform", "translate(50px,0px)");  
+
+	d3.select("#regionResiduals svg .x text")
+	  .style("transform", "rotate(-45deg)") 
+}
+
 function resizeCharts() {
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
 	dc.redrawAll();
+	
+	rotateXText(); 
 }
