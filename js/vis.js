@@ -389,8 +389,11 @@ $(window).on("resize", function() {
 // 
 
 function resizeCharts() {
+	buildHappinessChange();
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
+	buildCountryResiduals(2016);
+	buildRegionResiduals(2016);
 	dc.redrawAll();
 	
 	// rotateXText(); 
