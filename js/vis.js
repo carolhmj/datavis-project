@@ -42,7 +42,6 @@ let countryFacts;
 let regionByCountry = d3.map();
 let dystopiaByYear = {'2015': 2.10, '2016': 2.33, '2017': 1.85}
 let shownCountriesHappinessChanges = ["Brazil", "Egypt", "Greece", "Syria", "Liberia", "Venezuela"];
-let regionsResiduals2016 = ["Latin America\n and Caribbean", "North America\n and ANZ", "South Asia", "Western Europe", "Middle East\n and\n North Africa", "Central\n and\n Eastern Europe", "Commonwealth\n of\n Independent States", "Sub-Saharan\n Africa", "East Asia", "Southeast Asia"];
 
 function buildCharts(error, happinessAll, happiness2015, happiness2016, happiness2017, suicideRate, regions) {
 	let countriesData = [];		
@@ -117,7 +116,24 @@ function buildCharts(error, happinessAll, happiness2015, happiness2016, happines
 	buildCountryResiduals(2016);
 	buildRegionResiduals(2016);
 	dc.renderAll();
-	rotateXText();
+	// rotateXText();
+}
+
+function rotateXText(chart) {
+	let h = +d3.select("#regionResiduals svg")
+	  .attr("height");
+	let w = +d3.select("#regionResiduals svg")
+	  .attr("width");
+
+	d3.select("#regionResiduals svg")
+	  .attr("height", h+100)
+	  .attr("width", w+50)
+
+	d3.select("#regionResiduals svg")
+	  .style("transform", "translate(50px,0px)");  
+
+	d3.select("#regionResiduals svg .x text")
+	  .style("transform", "rotate(-45deg)") 
 }
 
 function buildRegionResiduals(year) {
@@ -147,7 +163,6 @@ function buildRegionResiduals(year) {
 								.sort((x, y) => y.value.sum/y.value.count - x.value.sum/x.value.count)
 								.map(d => d.key[0])
 								.filter(d => !(typeof d == "undefined"));
-	console.log(allRegions);
 
 	let _bbox = regionResiduals.root().node().parentNode.getBoundingClientRect();
 
@@ -162,7 +177,11 @@ function buildRegionResiduals(year) {
 				   .keyAccessor(d => d.key[0])
 				   .valueAccessor(d => d.value.sum / d.value.count)
 				   .renderHorizontalGridLines(true)
-				   .colors(["#0e8373"]);			   
+				   .brushOn(false)
+				   .colors(["#0e8373"])
+				   .renderlet(chart => rotateXText(chart));
+
+	regionResiduals.filter = function() {};			   
 }
 
 function buildCountryResiduals(year) {
@@ -193,9 +212,10 @@ function buildCountryResiduals(year) {
 					.renderHorizontalGridLines(true)
 					.colors(["#0e8373", "#DAF7A6"])
 					.colorDomain([1,2])
+					.brushOn(false)
 					.colorAccessor(d => colorScale($.inArray(d.key[0], topBottomCountries)));
 
-
+	countryResiduals.filter = function() {};					
 }
 
 function buildHappinessChange() {
@@ -203,8 +223,6 @@ function buildHappinessChange() {
 	let happinessGroup = countryDimension.group().reduceSum(d => d.happiness);
 
 	happinessGroup = filterBins(happinessGroup, d => $.inArray(d.key[0], shownCountriesHappinessChanges) > -1);
-
-	console.log(happinessGroup.all());
 
 	let _bbox = happinessChanges.root().node().parentNode.getBoundingClientRect();
 
@@ -223,7 +241,9 @@ function buildHappinessChange() {
 					.colors(domain)
 					.group(happinessGroup)
 					.renderTitle(false)
+					.brushOn(false)
 					.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(_bbox.width-100).y(_bbox.height-150).legendWidth(140).itemWidth(150));
+	happinessChanges.filter = function() {};					
 }
 
 function buildHappinessFactors() {
@@ -307,6 +327,8 @@ function buildHappinessFactors() {
 		happinessFactors.stack(filteredGroup, explSocialSupport, sel_stack(explSocialSupport));
 		happinessFactors.stack(filteredGroup, explCorruption, sel_stack(explCorruption));
 		happinessFactors.stack(filteredGroup, explGenerosity, sel_stack(explGenerosity));
+
+	happinessFactors.filter = function() {};		
 }
 
 function buildHappinessAndSuicide() {
@@ -357,33 +379,19 @@ function buildHappinessAndSuicide() {
 		})
 		.legend(dc.legend().itemHeight(13).gap(5).horizontal(1).x(chartWidth-250).y(210).legendWidth(140).itemWidth(150));
 
+	happinessAndSuicide.filter = function() {};		
+
 }
 
 $(window).on("resize", function() {
 	resizeCharts();
 });
-
-function rotateXText() {
-	let h = +d3.select("#regionResiduals svg")
-	  .attr("height");
-	let w = +d3.select("#regionResiduals svg")
-	  .attr("width");
-
-	d3.select("#regionResiduals svg")
-	  .attr("height", h+100)
-	  .attr("width", w+50)
-
-	d3.select("#regionResiduals svg")
-	  .style("transform", "translate(50px,0px)");  
-
-	d3.select("#regionResiduals svg .x text")
-	  .style("transform", "rotate(-45deg)") 
-}
+// 
 
 function resizeCharts() {
 	buildHappinessFactors();
 	buildHappinessAndSuicide();
 	dc.redrawAll();
 	
-	rotateXText(); 
+	// rotateXText(); 
 }
