@@ -69,3 +69,41 @@ a {
 .list-custom {
     background-color: rgba(204, 255, 204, 0.3) 
 }
+
+.quote {
+    margin: 40px;
+    margin-right:80px;
+}
+
+.quote td {
+    padding:15px;
+}
+
+.quote td:nth-child(1):before {
+    font-family: FontAwesome;
+    content: "\f10d";
+    font-size:50px;
+    color:#0e83725d;
+}
+.quote td:nth-child(1) {
+    padding-top:0;
+    line-height: 0px;
+}
+.quote td:nth-child(2) {
+    padding-left: 10px;
+    padding-top:25px;
+    background-color: #0e837215;
+    border-left: 5px solid #0e8373;
+    border-radius: 5px;
+}
+
+.lead {
+    font-size:16px;
+}
+
+dl {
+    background-color: #0e837215 !important;
+    padding:15px 5px;
+    margin:1px;
+    border-left: 5px solid #0e8373;
+}
