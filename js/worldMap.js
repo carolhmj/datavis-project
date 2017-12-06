@@ -174,7 +174,7 @@ function setMapTo(country){
             map.flyTo([9.74,-83.75], 7);
             break;
         case "Argelia":
-            map.flyTo([9.74,-83.75], 7);
+            map.flyTo([28.03, 1.65], 5);
             break;
         default:
             map.setView([20,0], 2);
