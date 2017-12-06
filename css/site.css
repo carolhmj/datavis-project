@@ -65,3 +65,7 @@ a {
 #footer a:hover {
     color: rgb(145, 145, 145);
 }
+
+.list-custom {
+    background-color: rgba(204, 255, 204, 0.3) 
+}

@@ -40,14 +40,24 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                    <a class="nav-link" href="#top">Início <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#introduction">Introdução<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#1">Seção 1</a>
+                        <a class="nav-link" href="#map">Mapa</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#2">Seção 2</a>
+                        <a class="nav-link" href="#factors">Fatores</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#changes">Mudanças</a>
+					</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#suicide">Suicídio</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link reset" href>Limpar filtros</a>
                     </li>
                 </ul>
             </div>
@@ -55,60 +65,128 @@
     </nav>
     <div class="container">
         <div id="main">
-            <div id="top" class="section">
-                <h1>Uma exploração da felicidade</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
-
+            <div id="introduction" class="section">
+                <h1 class="display-3">Uma exploração da felicidade</h1>
+                <p class="lead">Você já parou para pensar em como está a sua vida hoje? Você se considera feliz com ela? O que você acredita que torna sua vida mais feliz ou infeliz? Essas perguntas, que antes eram exclusivas de nossas reflexões pessoais, hoje são vistas pelos cientistas como chaves para analisar o bem-estar das populações do mundo, e promover um novo tipo de crescimento, que busque acima de tudo, a felicidade de todos.</p>
+				<p>Com esse fim, a ONU publica anualmente o <a href="http://worldhappiness.report/" class=clickable-text>World Happiness Report</a>, uma coleção de dados e estudos sobre a felicidade, procurando entender seus fatores contribuintes em vários países e situações. Uma das principais fontes de dados do World Happiness Report é o Gallup World Poll, que realiza pesquisas presenciais e por telefone em todo o mundo. A pergunta que mede os níveis de felicidade em todo o mundo é a seguinte:</p>
+					<p class="text-right font-weight-bold">Por favor, imagine uma escada, com degraus numerados de 0, na parte inferior, a 10, na parte superior. A parte superior representa a melhor vida possível para você, e a parte inferior representa a pior vida possível para você. Em que degrau da escada você diria que está nesse momento?</p>
+				<p> O mapa a seguir representa a média das respostas da população nos três World Happiness Reports mais recentes.</p>
+            </div>
+            <div id="map" class="section ">
                 <div class="slider-container">
                     <div>
-                      <input id="year-slider" type="range" min="1" max="3" steps="1" value="3" >
+                      <input id="year-slider" class="year-slider" type="range" min="1" max="3" steps="1" value="3" >
                     </div>
                     <ul class="range-labels">
+                      <span>2014</span>
                       <span>2015</span>
-                      <span>2016</span>
-                      <span class="active">2017</span>
+                      <span class="active">2016</span>
                     </ul>
                 </div>
                 <span class=clickable-text onclick="setMapTo('reset')">reset map position</span>
-                <div id="worldmap">
-                    <div class="map-tooltip"></div>
-                </div>
-            </div>
-            <div id="1" class="section ">
+                <figure>
+                    <div id="worldmap">
+                        <div class="map-tooltip"></div>
+                    </div>
+                </figure>
+                 <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs (múltiplos anos). World Happiness Report, New York: Sustainable Development Solutions Network.</figcaption>
                 <p class='map-text'>Ao passar o mouse por cima de um país é possível observar o índice de felicidade dele e logo acima do mapa há um slider para alternar os dados entre os anos disponíveis. 
                 O primeiro fato interessante a se observar é a distribuição de cores por continente, independente do ano é visível que as cores da África e da Ásia são em geral bem mais claras que as dos outros continentes, na <span class=clickable-text onclick="setMapTo('Africa')">África</span> de fato não se vê nenhum país com índice acima de 6, na <span class=clickable-text onclick="setMapTo('Asia')">Ásia</span> há 8 países com índice acima 6, mas apenas um deles tem índice acima de 7: <span class=clickable-text onclick="setMapTo('Israel')">Israel</span>. É interessante ressaltar que apesar disso o território quase completamente envolto por Israel, <span class=clickable-text onclick="setMapTo('West Bank')">"West Bank"</span> (em português conhecido como os Territórios Palestinos Ocupados que abrangem Cisjordânia, Faixa de Gaza e Jerusalém Oriental) possui um ĩndice de felicidade muito mais baixo de, em média dos anos disponíveis, 4,75. 
                 <br> Também como único país com índice acima de 7 em uma região temos a <span class=clickable-text onclick="setMapTo('Costa Rica')">Costa Rica</span> na América Latina. Esse país na realidade em todos os anos disponíveis de Happiness Report sempre teve um índice muito alto, tanto é que em 2016 ela é o 12º país mais feliz do mundo. Em uma outra pesquisa a respeito de felicidade no mundo conhecida como <a href="http://happyplanetindex.org/" class=clickable-text>Happy Planet Index</a> a Costa Rica foi o país mais feliz do mundo em três edições. Isso provavelmente se deve ao fato de que eles não possuem forças militares há décadas e assim conseguiram investir mais em saúde, educação e na proteção de seu meio ambiente.</p>
-                <div id="happinessFactorsContainer">
-                    <div id="happinessFactors"></div>
-                </div>
             </div>
-            
-            <div id="2" class="section">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
-                <div id="happinessAndSuicideContainer">
-                    <div id="happinessAndSuicide"></div>
+            <div id="factors" class="section">
+                <p>O World Happiness Report considera seis variáveis chaves para explicar a felicidade em um país:</p>
+                <dl class="row list-custom">
+                    <dt class="col-sm-3">GDP per capita</dt>
+                    <dd class="col-sm-9">Ajustado em termos de paridade de compra, e utilizado em forma de log, pois ajusta-se melhor aos dados.</dd>
+                    <dt class="col-sm-3">Expectativa de vida saudável (Healthy life expectance)</dt>
+                    <dd class="col-sm-9">Baseado em dados da World Health Organization (WHO), extrapolados a partir dos dados de 2012.</dd>
+                    <dt class="col-sm-3">Suporte social (Social Support)</dt>
+                    <dd class="col-sm-9">Média nacional das respostas binárias à seguinte questão do Gallup World Poll: <em>"Se você estiver com problemas, você tem parentes ou amigos em quem você pode contar para ajudá-lo quando precisar, sim ou não?"</em></dd>
+                    <dt class="col-sm-3">Liberdade de escolha (Freedom do make life choices)</dt>
+                    <dd class="col-sm-9">Média nacional de respostas binárias à pergunta do Gallup World Poll: "Você está satisfeito com a liberdade de escolher o que você faz com a sua vida?"</dd>
+                    <dt class="col-sm-3">Generosidade (Generosity)</dt>
+                    <dd class="col-sm-9">Residual de regressão da média nacional de respostas binárias à pergunta do Gallup World Poll: "Você doou dinheiro para uma organização de caridade no último mês?" em GDP per capita.</dd>
+                    <dt class="col-sm-3">Percepção de corrupção (Perceptions of Corruption)</dt>
+                    <dd class="col-sm-9">Média das respostas de duas perguntas do GWP: "A corrupção é generalizada dentro do governo?" e "A corrupção é generalizada dentro das empresas?". Quando não há dados de corrupção no governo, a corrupção nas empresas é utilizada como medida única.</dd>   
+                </dl>
+                <p>Em cada WHR, é realizada uma análise de regressão nos dados, obtendo coeficientes que explicam o relacionamento entre a felicidade de um país e as variáveis.</p>
+                <p>No entanto, a felicidade é um sentimento complexo demais para ser previsto apenas por essa quantidade de dados. Existem outros fatores, especialmente sociais e culturais, que podem afetar os níveis de felicidade de um país. A diferença entre o valor de felicidade previsto para um país pelo modelo, e o valor de fato é chamado de residual. Esse residual pode ser tanto positivo como negativo.</p>
+                <p>O seguinte gráfico de barras mostra a contribuição de cada fator nos escores de felicidade dos 5 melhores e piores países do ranking. Para entendê-lo melhor, precisamos falar sobre a terrível Dystopia! Dystopia é um país fictício com os piores indicadores do mundo entre os seis fatores da felicidade. A felicidade de Dystopia, calculada pelo modelo, é considerada a base de comparação com todos os outros países. Portanto, para calcular, por exeemplo, a contribuição do GDP per capita da Noruega, subtraímos o GDP per capita da Noruega pelo GDP per capita de Dystopia e multiplicamos pelo coeficiente de contribuição do GDP per capita na felicidade. O residual que obtemos é somado com o valor da felicidade em Dystopia, para obter uma medida positiva, e assim obtemos o gráfico. Observe que, se o valor de Dystopia+Residual é menor que a felicidade em Dystopia, temos um residual negativo e um país mais triste que o previsto, e vice-versa.</p>
+                <div class="slider-container">
+                    <div>
+                      <input id="year-slider-happiness-factor" class="year-slider" type="range" min="1" max="3" steps="1" value="3" >
+                    </div>
+                    <ul class="range-labels">
+                      <span>2014</span>
+                      <span>2015</span>
+                      <span class="active">2016</span>
+                    </ul>
                 </div>
-            </div>
-            
-            <div id="3" class="section">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
-                <div id="happinessChangesContainer">
-                    <div id="happinessChanges"></div>
-                </div>
+                <figure>
+                    <div id="happinessFactorsContainer">
+                        <div id="happinessFactors"></div>
+                    </div>
+                <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs (múltiplos anos). World Happiness Report, New York: Sustainable Development Solutions Network.</figcaption>
+                </figure>
+                <p>Podemos observar nesse gráfico que os países do topo do ranking não possuem grande variação entre valores, e as posições do topo também não variam muito de ano a ano. Já as posições mais baixas possuem maior variação entre si, e também de ano a ano. Em 2017, foi constatado que a diferença do valor estimado de cada país e o valor de Dystopia era 3.5, e a maior parte dessa diferença era explicada por variações de suporte social e GDP per capita.</p>
             </div>
 
-            <div id="4" class="section">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin laoreet libero vel feugiat. Vivamus ac leo sed mi congue posuere et ut purus. Phasellus vitae lectus in ligula dignissim congue. Sed ut tincidunt mi, ac facilisis nisi. Suspendisse mollis efficitur elit sit amet rutrum. Nulla commodo nibh sem, ac congue elit tempor non. Donec eleifend pretium ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat dictum odio a accumsan. Pellentesque faucibus ipsum at magna vestibulum elementum.</p>
-                <div id="regionResidualsContainer">
-                    <div id="regionResiduals"></div>
-                </div>
-
-                <div id="countryResidualsContainer">
-                    <div id="countryResiduals"></div>
-                </div>
+            <div id="residuals" class="section">
+                <p>O próximo gráfico mostra os residuais divididos por região. É interessante observar os valores residuais e correlacionar com nosso conhecimento de mundo. A alegria sempre foi vista como uma característica do povo latino, e isso é confirmado no gráfico. As outras regiões no topo dos residuais, América do Norte (incluindo apenas Canadá e EUA) e ANZ (sigla para Austrália e Nova Zelândia), e Europa Ocidental, são ainda mais felizes que o modelo prevê, possivelmente pelo fator de segurança que seus indicadores econômicos e sociais proporcionam. A África, apesar de ser a região com menores indicadores econômicos e sociais, não está na última posição do ranking, representando um grande otimismo que as populações africanas sentem em relação ao futuro. As duas últimas posições estão na Ásia, porém compreendem regiões muito diferentes. O Sudoeste Asiático, representados por países como Tailândia, Indonésia, Filipinas e Vietnã, cresceu com o fim do colonialismo, mas ainda tem muitos problemas a enfrentar e a visão dos povos desses países não é tão otimista quanto a dos africanos. Já o Leste Asiático, possui países com enorme potencial econômico e social, como China, Japão e Coreia do Sul, mas com tradições culturais que elevam o trabalho a patamares doentios.</p>
+                <figure>
+                    <div id="regionResidualsContainer">
+                        <div id="regionResiduals"></div>
+                    </div>
+                <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs (múltiplos anos). World Happiness Report, New York: Sustainable Development Solutions Network.</figcaption>
+                </figure>
+                <p>O gráfico dos cinco maiores e menores residuais por região também é interessante. Vemos a grande presença da América Latina no topo, e do nosso país. Já nas posições inferiores, vemos países da África e Ásia, muitos afetados por guerras civis no passado e presente.</p>    
+                <figure>                
+                    <div id="countryResidualsContainer">
+                        <div id="countryResiduals"></div>
+                    </div>
+                <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs (múltiplos anos). World Happiness Report, New York: Sustainable Development Solutions Network.</figcaption>
+                </figure>
             </div>            
+                    
+            <div id="changes" class="section">
+                <p>As mudanças de felicidade de um pais ao longo do tempo refletem as suas mudanças politicas e sociais. Alguns paises e suas mudanças sao mostrados a seguir:</p>
+                <dl class="row list-custom">
+                    <dt class="col-sm-3 text-right" style="color:#fc8d62">Egito</dt>
+                    <dd class="col-sm-9">Durante o período ditadorial de Hosni Mubarak, a felicidade oscilava, com momentos de ganho e perda. Nos anos imediatamente anteriores à revolução, houve queda de felicidade, e de 2011 para 2012, um pequeno crescimento. No entanto, a instabilidade política provocou um grande pessimismo, que só começou a se recuperar com a eleição do atual presidente, Abdel Fattah, e a estabilização política.</dd>
+                    <dt class="col-sm-3 text-right" style="color:#66c2a5">Brasil</dt>
+                    <dd class="col-sm-9">O nosso país sempre foi reconhecido pela alegria do seu povo. Mas como todos os outros países, a alegria geral da população depende muito dos acontecimentos marcantes do ano. 2007, o menor ano da série teve o acidente aéreo em Congonhas, greve na aviação, a cratera no metrô de São Paulo, entre outros. 2012, o terceiro pior, teve greve nas federais, julgamentos do mensalão, seca no Nordeste. Já o segundo pior ano foi 2016. Você consegue imaginar os eventos que levaram a isso?</dd>
+                    <dt class="col-sm-3 text-right" style="color:#a6d854">Síria</dt>
+                    <dd class="col-sm-9">Assim como no Egito, a Primavera Árabe também atingiu a Síria, porém, com consequências muito mais trágicas. A felicidade de 2011 a 2013 diminuiu bastante, porém, provando o otimismo do ser humano, voltou a crescer mesmo não havendo um fim a vista para a guerra civil.</em></dd>
+                    <dt class="col-sm-3 text-right" style="color:#e78ac3">Libéria</dt>
+                    <dd class="col-sm-9">A Libéria sofreu uma queda de quase dois pontos na escala de felicidade de 2014 para 2015, anos em que sofreu uma grave epidemia do vírus Ebola.</dd>
+                    <dt class="col-sm-3 text-right" style="color:#ffd92f">Venezuela</dt>
+                    <dd class="col-sm-9"> A população da Venezuela vem sentindo os efeitos da sua crise política. Em 2010, o país possuía a respeitável nota de 7.48, reduzida a 4.04 em 2016.</dd>
+                    <dt class="col-sm-3 text-right" style="color:#8da0cb">Grecia</dt>
+                    <dd class="col-sm-9">Desde 2009 a crise do Euro vem atormentando a felicidade dos gregos.</dd>
+                </dl> 
+                <figure>                
+                    <div id="happinessChangesContainer">
+                        <div id="happinessChanges"></div>
+                    </div>
+                <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs (múltiplos anos). World Happiness Report, New York: Sustainable Development Solutions Network.</figcaption>
+                </figure>
+            </div>          
+            
+            <div id="suicide" class="section">
+                <p>É fácil pensar que, em países mais felizes a população comete menos suicídio, porém, não é isso que observamos nesse gráfico de felicidade e suicídio em 2015. Muitos países com altos índices de felicidade tem altas taxas reportadas de suicídio, enquanto muitos dos países com menores índices de felicidade possuem baixas taxas. Podemos ver também que, com exceção da Ásia, as regiões do mundo estão muito próximas em taxas de felicidade e suicídio, apontando também para fatores culturais nesses valores.</p>
+                <figure>                
+                    <div id="happinessAndSuicideContainer">
+                        <div id="happinessAndSuicide"></div>
+                    </div>
+                <figcaption class="figure-caption">Fontes: Helliwell, John F., Richard Layard, and Jeffrey Sachs, eds. 2015. World Happiness Report 2015.
+New York: Sustainable Development Solutions Network. | THE WORLD BANK. Suicide mortality rate (per 100,000 population). Disponível em: <https://data.worldbank.org/indicator/sh.sta.suic.p5>.</figcaption>
+                </figure>
+            </div>
         </div>
     </div>
+           
+            
     <div class="footer">
         <div class="container">
             <h5>Projeto final para a disciplina de Visualização de Dados (2017.2)</h5>

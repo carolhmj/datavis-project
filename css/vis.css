@@ -2,16 +2,8 @@
 
 div#happinessFactorsContainer {
 	width: 100%;
-	height: 330px;
-}
-
-div#happinessFactorsLegend {
-	width: 100%;
-	display: flex;
-}
-
-.legend-item {
-	margin: 15px;
+	height: 450px;
+	margin-bottom: -80px;
 }
 
 div#happinessFactors {
@@ -27,15 +19,12 @@ div#happinessFactors {
 }
 
 #happinessFactors svg .x .tick text {
-	transform: translate(-14px, 23px) rotate(270deg);
-}
-
-.dc-legend-item {
-	text-decoration: underline;
+	text-anchor: end !important;
+	transform: translate(-14px, 12px) rotate(270deg);
 }
 
 .dc-legend-item:hover {
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 div#happinessAndSuicideContainer {
@@ -74,6 +63,21 @@ div#regionResiduals {
 	position: absolute;
 }
 
+.hidden {
+	display: none;
+}
+
+#happinessChangesTooltip {
+  position: absolute;
+  background: rgba(0,0,0,.75);
+  color: white;
+  padding: .5em .75em;
+  font-size: 1em;
+  display: none;
+  z-index: 450;
+	opacity: 0.8;
+}
+
 .clickable-text {
 	color: #0E8373;
 	font-style: italic;
@@ -81,6 +85,7 @@ div#regionResiduals {
 }
 
 .map-text {
+	margin-top: 15px;
 	max-height: 200px;
 	overflow-y: auto;
 }

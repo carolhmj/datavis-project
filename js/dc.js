@@ -4138,9 +4138,11 @@
             .values(prepareValues);
     
         var _stack = [];
+        var _stackAux = [];
         var _titles = {};
     
         var _hidableStacks = false;
+        var _movableStacks = false;
         var _evadeDomainFilter = false;
     
         function domainFilter () {
@@ -4235,11 +4237,52 @@
             _hidableStacks = hidableStacks;
             return _chart;
         };
+
+        /**
+         * Allow named stacks to be moved to beginning by clicking on legend items.
+         * This does not affect the behavior of hideStack or showStack.
+         * @method movableStacks
+         * @memberof dc.stackMixin
+         * @instance
+         * @param {Boolean} [moveableStacks=false]
+         * @returns {Boolean|dc.stackMixin}
+         */
+
+        _chart.movableStacks = function (movableStacks) {
+            if (!arguments.length) {
+                return _movableStacks;
+            }
+            _movableStacks = movableStacks;
+            return _chart;
+        };
     
         function findLayerByName (n) {
             var i = _stack.map(dc.pluck('name')).indexOf(n);
             return _stack[i];
         }
+
+        /**
+         * Hide all stacks on the chart with the given name.
+         * The chart must be re-rendered for this change to appear.
+         * @method moveStack
+         * @memberof dc.stackMixin
+         * @instance
+         * @param {String} stackName
+         * @returns {dc.stackMixin}
+         */
+        _chart.moveStack = function (stackName) {
+            var i = 0;
+            var j = _stack.map(dc.pluck('name')).indexOf(stackName);
+            var ran = [];
+            ran = _stack;
+
+            var temp = _stack[i];
+            ran[i] = findLayerByName(stackName);
+            ran[j] = temp;
+            _stack = ran;
+            
+            return _chart;
+        };
     
         /**
          * Hide all stacks on the chart with the given name.
@@ -4418,7 +4461,10 @@
         });
     
         _chart.legendables = function () {
-            return _stack.map(function (layer, i) {
+            if (_stackAux.length == 0) {
+                _stackAux = _stack.slice();
+            }
+            return _stackAux.map(function (layer, i) {
                 return {
                     chart: _chart,
                     name: layer.name,
@@ -4432,6 +4478,8 @@
             var layer = findLayerByName(d.name);
             return layer ? layer.hidden : false;
         };
+
+        var isLegendableMoving = false;
     
         _chart.legendToggle = function (d) {
             if (_hidableStacks) {
@@ -4442,6 +4490,19 @@
                 }
                 //_chart.redraw();
                 _chart.renderGroup();
+            }
+            if(_movableStacks) {
+                _chart.moveStack(d.name);
+                //_chart.redraw();
+                _chart.redrawGroup();
+                _chart.legendHighlight(false);
+                isLegendableMoving = true;
+                _chart.on('postRedraw', function(chart){
+                    if (isLegendableMoving) {
+                        chart.legendHighlight(d);
+                        isLegendableMoving = false;
+                    }
+                });
             }
         };
     
