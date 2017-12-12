@@ -276,7 +276,9 @@ function buildHappinessFactors() {
 		d.key[1] == sliderYear && !(isNaN(d.value[happinessScore])))
 									.sort((c1, c2) => {return c2.value[happinessScore] - c1.value[happinessScore]})
 									.map(x => x.key[0]);
-
+	
+	//let brazil = $.grep(countriesWithHappinessScores, d => d == "Brazil");
+	//let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(brazil).concat(countriesWithHappinessScores.slice(-5)));
 	let topBottomCountries = (countriesWithHappinessScores.slice(0,5).concat(countriesWithHappinessScores.slice(-5)));
 
 	var filteredGroup = filterBins(factorsGroup, function(d) {
